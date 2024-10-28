@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# 🚀 Personal Portfolio Website
 
-First, run the development server:
+Welcome to my personal portfolio website! This project showcases my work, skills, and professional background. Built with the latest in frontend technologies, it offers a modern and responsive UI that emphasizes user experience and accessibility.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🖥 Tech Stack
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Next.js 14**: For seamless, server-rendered React and an optimized development experience.
+- **TypeScript**: Ensuring type safety and maintaining clean, predictable code.
+- **Tailwind CSS**: For efficient, responsive, and customizable styling.
+- **Aceternity UI**: A library of reusable components to provide a consistent UI and save development time.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## 🚀 Getting Started
 
-To learn more about Next.js, take a look at the following resources:
+### Prerequisites
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Node.js** and **npm** (or **yarn**) installed.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## ⚙️ Configuration
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Tailwind CSS**: Tailwind is configured in `tailwind.config.js` with custom colors, fonts, and responsive breakpoints tailored for the site.
+- **TypeScript**: Type checking and improved developer experience with `tsconfig.json`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📄 Features
+
+- **Modern UI Design**: Created with reusable components from Aceternity UI.
+- **Type Safety**: Enhanced type safety with TypeScript.
+- **Responsive Layout**: Optimized for mobile, tablet, and desktop viewing.
+- **SEO Optimized**: Enhanced SEO with Next.js.
+- **Custom Animations**: Smooth, visually appealing animations using Tailwind CSS.
