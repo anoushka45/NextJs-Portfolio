@@ -86,11 +86,11 @@ export const projects = [
   },
   {
     id: 2,
-    title: "Yoom - Video Conferencing App",
-    des: "Simplify your video conferencing experience with Yoom. Seamlessly connect with colleagues and friends.",
-    img: "/p2.svg",
+    title: "UrbanAura Ecommece App",
+    des: "A modern e-commerce website built with Next.js 15, TypeScript, Tailwind CSS, Sanity.io for content management.",
+    img: "/home.png",
     iconLists: ["/next.svg", "/tail.svg", "/ts.svg", "/stream.svg", "/c.svg"],
-    link: "/ui.yoom.com",
+    link: "https://github.com/anoushka45/E-comm",
   },
   {
     id: 3,
