@@ -8,13 +8,7 @@ const RecentProj = () => {
     <div className='py-20' id="projects">
       <h1 className='heading'>A small selection of {' '} <span className='text-purple'>recent projects</span></h1>
 
-      <div className="flex justify-between items-center gap-6 mt-12">
-  {techStackIcons.map((icon, index) => (
-    <div key={index} className="w-10 h-10 flex justify-center items-center transition-transform duration-300 hover:rotate-12">
-      <img src={icon} alt="Tech Stack Icon" className="w-full h-full" />
-    </div>
-  ))}
-</div>
+ 
 
       <div className='flex flex-wrap items-center justify-center p-4 
       gap-x-24 gap-y-8 mt-10'>

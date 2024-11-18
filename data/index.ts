@@ -76,30 +76,34 @@ export const gridItems = [
 ];
 
 export const projects = [
+
   {
     id: 1,
+    title: "InspireAI - AI Content Generator App",
+    des: "An AI-powered content generation app that uses GPT-3 (Gemini) to create high-quality text. It provides a user-friendly experience with seamless integration of Next.js, React, TailwindCSS, TypeScript, Clerk, and Shadcdn UI. The app helps users effortlessly generate creative and relevant content for various purposes.",
+    img: "/p3.png",
+    iconLists: ["/re.svg", "/tail.svg", "/ts.svg", "/three.svg", "/c.svg"],
+    link: "https://github.com/anoushka45/AI-Content-Generator-App-",
+  },
+ 
+  {
+    id: 2,
+    title: "UrbanAura - Ecommerce App",
+    des: "A modern e-commerce website built with Next.js 15, TypeScript, Tailwind CSS, Sanity.io for content management.",
+    img: "/home.png",
+    iconLists: ["/next.svg", "/tail.svg", "/ts.svg", "/stream.svg", "/c.svg"],
+    link: "https://github.com/anoushka45/E-comm",
+  },
+
+  {
+    id: 3,
     title: "Folder and Media Management Portal",
     des: "A media management system for Committees, Admins, and End Users, enabling seamless uploads, approvals, and sharing.",
     img: "/p1.png",
     iconLists: ["/re.svg", "/tail.svg", "/ts.svg", "/three.svg", "/fm.svg"],
     link: "https://github.com/anoushka45/folder-management-portal",
   },
-  {
-    id: 2,
-    title: "UrbanAura Ecommece App",
-    des: "A modern e-commerce website built with Next.js 15, TypeScript, Tailwind CSS, Sanity.io for content management.",
-    img: "/home.png",
-    iconLists: ["/next.svg", "/tail.svg", "/ts.svg", "/stream.svg", "/c.svg"],
-    link: "https://github.com/anoushka45/E-comm",
-  },
-  {
-    id: 3,
-    title: "AI Image SaaS - Canva Application",
-    des: "A REAL Software-as-a-Service app with AI features and a payments and credits system using the latest tech stack.",
-    img: "/p3.svg",
-    iconLists: ["/re.svg", "/tail.svg", "/ts.svg", "/three.svg", "/c.svg"],
-    link: "/ui.aiimg.com",
-  },
+  
   {
     id: 4,
     title: "Animated Apple Iphone 3D Website",
