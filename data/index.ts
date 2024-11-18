@@ -56,7 +56,7 @@ export const gridItems = [
     title: "Crafting Interactive and Responsive Web Solutions",
     description: "Developing full-stack web applications using React, Node.js, and other modern frameworks. Focusing on creating responsive, user-friendly interfaces and ensuring efficient backend functionality to provide seamless user experiences across devices. ",
     className: "md:col-span-3 md:row-span-2 ",
-    imgClassName: "absolute right-0 bottom-0 md:w-96 w-60",
+    imgClassName: "absolute right-0 bottom-0 md:w-96 w-60 hidden md:block",
     titleClassName: "justify-center md:justify-start lg:justify-center",
     img: "/b5.svg",
     spareImg: "/grid.svg",
