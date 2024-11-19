@@ -99,18 +99,18 @@ export const projects = [
     id: 3,
     title: "Folder and Media Management Portal",
     des: "A media management system for Committees, Admins, and End Users, enabling seamless uploads, approvals, and sharing.",
-    img: "/p1.png",
+    img: "mediaNest.png",
     iconLists: ["/re.svg", "/tail.svg", "/ts.svg", "/three.svg", "/fm.svg"],
     link: "https://github.com/anoushka45/folder-management-portal",
   },
   
   {
     id: 4,
-    title: "Animated Apple Iphone 3D Website",
-    des: "Recreated the Apple iPhone 15 Pro website, combining GSAP animations and Three.js 3D effects..",
-    img: "/p4.svg",
+    title: "SheDefend-Women Safety App",
+    des: "A Flutter app offering SOS alerts, crime mapping, and safer route planning for women's security. It also features real-time crime reporting and safety resources.",
+    img: "/sheDefend.png",
     iconLists: ["/next.svg", "/tail.svg", "/ts.svg", "/three.svg", "/gsap.svg"],
-    link: "/ui.apple.com",
+    link: "https://github.com/anoushka45/sheDefend-womenSafety",
   },
 ];
 
