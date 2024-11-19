@@ -29,7 +29,7 @@ const Hero = () => {
 
       <div className="flex justify-center relative z-10 my-10">
   <div className="text-center text-[40px] md:text-4xl lg:text-6xl flex flex-col items-center justify-center">
-  <p className="bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-pink-300 font-bold hover:from-pink-400 hover:to-violet-600 hover:shadow-lg transition duration-300">
+  <p className="bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-pink-300 font-bold hover:from-pink-400 hover:to-violet-600 hover:shadow-lg transition-all duration-800 ease-in-out hover:cursor-pointer">
   ANOUSHKA VYAS
 </p>
 

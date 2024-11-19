@@ -23,6 +23,8 @@ const config = {
       padding: "2rem",
       screens: {
         "2xl": "1400px",
+        '3xl': '2560px', // Custom breakpoint for 2560px and above
+
       },
     },
     
@@ -34,6 +36,7 @@ const config = {
           200: "rgba(17, 25, 40, 0.75)",
           300: "rgba(255, 255, 255, 0.125)",
         },
+        
         white: {
           DEFAULT: "#FFF",
           100: "#BEC1DD",

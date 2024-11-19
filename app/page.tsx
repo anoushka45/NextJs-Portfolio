@@ -17,7 +17,6 @@ export default function Home() {
       <RecentProj />
       <Experience />
       <Approach/>
-
     </div>
     <Footer/>
 
