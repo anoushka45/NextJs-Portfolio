@@ -50,7 +50,7 @@ const Hero = () => {
 </p>
   
 
-<a href="/docs/resume.pdf" target="_blank" rel="noopener noreferrer">
+<a href="/docs/resume1.pdf" target="_blank" rel="noopener noreferrer">
   <MagicButton title="Show my work" 
     icon={<FaLocationArrow />}
     position='right' />
