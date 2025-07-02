@@ -42,15 +42,13 @@ const Hero = () => {
 />
 
 
-      <p className='bg-clip-text text-transparent bg-gradient-to-r from-pink-200 to-blue-400  hover:from-pink-300 hover:to-blue-500 text-center md:tracking-wider mb-4 text-sm md:text-lg lg:text-2xl relative'>
-
-
-       A Web Developer and final-year IT student passionate about building intuitive, user-friendly web applications. I love transforming ideas into fully functional digital experiences. Take a look at my work and see what I’ve been creating!
-
+      <p className='bg-clip-text text-transparent bg-gradient-to-r from-pink-200 to-blue-400 hover:from-pink-300 hover:to-blue-500 text-center md:tracking-wider mb-4 text-sm md:text-lg lg:text-2xl relative'>
+  A Web Developer and recent IT graduate passionate about crafting intuitive, user-friendly web applications. I enjoy turning ideas into functional digital experiences. Explore my work to see what I’ve been building!
 </p>
+
   
 
-<a href="/docs/resume1.pdf" target="_blank" rel="noopener noreferrer">
+<a href="/docs/resume_july.pdf" target="_blank" rel="noopener noreferrer">
   <MagicButton title="Show my work" 
     icon={<FaLocationArrow />}
     position='right' />
