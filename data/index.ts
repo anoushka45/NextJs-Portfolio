@@ -12,7 +12,7 @@ export const navItems = [
 export const gridItems = [
   {
     id: 1,
-    title: "I prioritize client collaboration, fostering open communication ",
+    title: "I prioritize collaboration, fostering open communication ",
     description: "",
     className: "lg:col-span-3 md:col-span-6 md:row-span-4 lg:min-h-[60vh]",
     imgClassName: "w-full h-full",
@@ -183,13 +183,20 @@ export const companies = [
 export const workExperience = [
   {
     id: 1,
+    title: " Software Developer Trainee - Mphasis Ltd",
+    desc: "Worked as a frontend developer on a Java full stack project to build a Relationship Manager onboarding system. Built responsive UIs with Angular and integrated APIs in collaboration with backend teams.",
+    className: "md:col-span-2",
+    thumbnail: "/exp1.svg",
+  },
+  {
+    id: 2,
     title: "Frontend Web developer-Jio (Intern)",
     desc: "Translated various Figma designs into user-friendly and responsive code.Assisted in the development of a web-based platform using React.js, enhancing interactivity.",
     className: "md:col-span-2",
     thumbnail: "/exp1.svg",
   },
   {
-    id: 2,
+    id: 3,
     title: "Student Intern - KJSIT",
     desc: "Developed a PHP based Media Management System for College Committees, enabling seamless media uploads and an admin-led approval system to ensure content quality and appropriateness. ",
     className: "md:col-span-2", // change to md:col-span-2
