@@ -1,18 +1,19 @@
 
 export const navItems = [
- 
   { name: "Home", link: "/" },
-  { name: "About", link: "#about" },
-  { name: "Work", link: "#work" },
+  { name: "Focus", link: "#about" },
+  { name: "Experience", link: "#experience" },
   { name: "Projects", link: "#projects" },
+  { name: "Skills", link: "#skills" },
+  // { name: "What's Next", link: "#next" },
   { name: "Contact", link: "#contact" },
 ];
 
 export const gridItems = [
   {
     id: 1,
-    title: "I prioritize collaboration, fostering open communication ",
-    description: "",
+    title: "I build intelligent systems with a strong focus on real-world usability, backend architecture, and AI-driven workflows.",
+    description: "What I work on",
     className: "lg:col-span-3 md:col-span-6 md:row-span-4 lg:min-h-[60vh]",
     imgClassName: "w-full h-full",
     titleClassName: "justify-end",
@@ -21,9 +22,9 @@ export const gridItems = [
   },
   {
     id: 2,
-    title: "Flexible with time zones",
-    description: "",
-    className: "lg:col-span-2 md:col-span-3 md:row-span-2 ",
+    title: "Open to global teams and collaborative engineering environments",
+    description: "Based in Mumbai, comfortable working across time zones",
+    className: "lg:col-span-2 md:col-span-3 md:row-span-2",
     imgClassName: "",
     titleClassName: "justify-start",
     img: "",
@@ -31,8 +32,8 @@ export const gridItems = [
   },
   {
     id: 3,
-    title: "My tech stack",
-    description: "I constantly try to improve",
+    title: "My core tech stack",
+    description: "AI + backend + product-focused frontend",
     className: "lg:col-span-2 md:col-span-3 md:row-span-2",
     imgClassName: "",
     titleClassName: "justify-center",
@@ -41,30 +42,28 @@ export const gridItems = [
   },
   {
     id: 4,
-    title: "Focused on delivering impactful tech solutions.",
-    description: "",
+    title: "I enjoy building systems where AI is practical, explainable, and useful.",
+    description: "Engineering mindset",
     className: "lg:col-span-2 md:col-span-3 md:row-span-1",
     imgClassName: "",
     titleClassName: "justify-start",
     img: "/grid.svg",
     spareImg: "/b4.svg",
   },
-
   {
     id: 5,
-    title: "Crafting Interactive and Responsive Web Solutions",
-    description: "Developing full-stack web applications using React, Node.js, and other modern frameworks. Focusing on creating responsive, user-friendly interfaces and ensuring efficient backend functionality to provide seamless user experiences across devices. ",
-    className: "md:col-span-3 md:row-span-2 ",
+    title: "Currently focused on enterprise AI systems, retrieval pipelines, and scalable backend services.",
+    description:
+      "My current work spans LLM-based orchestration, FastAPI services, routing workflows, and real-world AI product development.",
+    className: "md:col-span-3 md:row-span-2",
     imgClassName: "absolute right-0 bottom-0 md:w-96 w-60 hidden md:block",
     titleClassName: "justify-center md:justify-start lg:justify-center",
     img: "/b5.svg",
     spareImg: "/grid.svg",
   },
-
-  
   {
     id: 6,
-    title: "Do you want to start a project together?",
+    title: "Let’s build something intelligent together",
     description: "",
     className: "lg:col-span-2 md:col-span-3 md:row-span-1",
     imgClassName: "",
@@ -75,44 +74,43 @@ export const gridItems = [
 ];
 
 export const projects = [
-
   {
     id: 1,
-    title: "InspireAI - AI Content Generator App",
-    des: "An AI-powered content generation app that uses GPT-3 (Gemini) to create high-quality text. It provides a user-friendly experience with seamless integration of Next.js, React, TailwindCSS, TypeScript, Clerk, and Shadcdn UI. The app helps users effortlessly generate creative and relevant content for various purposes.",
-    img: "/p3.png",
-    iconLists: ["/re.svg", "/tail.svg", "/ts.svg", "/three.svg", "/c.svg"],
-    link: "https://github.com/anoushka45/AI-Content-Generator-App-",
+    title: "DocQuery - Enterprise Knowledge Assistant",
+    des: "A Retrieval-Augmented Generation system for answering questions across multiple PDF documents using semantic search and grounded LLM responses.",
+    img: "/projects/docQuery.png",
+    link: "https://github.com/anoushka45/PDF_RAG_Assistant",
+    category: "AI",
+    tags: ["LangChain", "RAG", "Python", "ChromaDB", "LLM"],
   },
- 
   {
     id: 2,
-    title: "UrbanAura - Ecommerce App",
-    des: "A modern e-commerce website built with Next.js 15, TypeScript, Tailwind CSS, Sanity.io for content management.",
-    img: "/home.png",
-    iconLists: ["/next.svg", "/tail.svg", "/ts.svg", "/stream.svg", "/c.svg"],
-    link: "https://github.com/anoushka45/E-comm",
+    title: "InspireAI - AI Content Generator",
+    des: "An AI-powered content generation platform built with Next.js and Gemini for contextual, high-quality content creation.",
+    img: "/projects/InspireAI - AI Content Generator.png",
+    link: "https://github.com/anoushka45/AI-Content-Generator-App-",
+    category: "AI",
+    tags: ["Next.js", "Gemini", "TypeScript", "Tailwind"],
   },
-
   {
     id: 3,
-    title: "Folder and Media Management Portal",
-    des: "A media management system for Committees, Admins, and End Users, enabling seamless uploads, approvals, and sharing.",
-    img: "mediaNest.png",
-    iconLists: ["/re.svg", "/tail.svg", "/ts.svg", "/three.svg", "/fm.svg"],
-    link: "https://github.com/anoushka45/folder-management-portal",
+    title: "UrbanAura - Modern E-Commerce Platform",
+    des: "A modern full-stack e-commerce experience using Next.js, TypeScript, TailwindCSS, and Sanity CMS.",
+    img: "/projects/urbanAura.png",   
+    link: "https://github.com/anoushka45/UrbanAura-E-commerce-",
+    category: "Full Stack",
+    tags: ["Next.js", "CMS", "TypeScript", "Tailwind"],
   },
-  
   {
     id: 4,
-    title: "SheDefend-Women Safety App",
-    des: "A Flutter app offering SOS alerts, crime mapping, and safer route planning for women's security. It also features real-time crime reporting and safety resources.",
-    img: "/sheDefend.png",
-    iconLists: ["/next.svg", "/tail.svg", "/ts.svg", "/three.svg", "/gsap.svg"],
-    link: "https://github.com/anoushka45/sheDefend-womenSafety",
+    title: "Media Management Portal",
+    des: "A role-based media approval and management portal for uploads, moderation, and organization workflows.",
+    img: "/projects/mediaNest.png",
+    link: "https://github.com/anoushka45/folder-management-portal",
+    category: "Full Stack",
+    tags: ["PHP", "MySQL", "Admin Workflow", "Media"],
   },
 ];
-
 export const testimonials = [
   {
     quote:
@@ -182,39 +180,19 @@ export const companies = [
 export const workExperience = [
   {
     id: 1,
-    title: " Software Developer Trainee - Mphasis Ltd",
-    desc: "Worked as a frontend developer on a Java full stack project to build a Relationship Manager onboarding system. Built responsive UIs with Angular and integrated APIs in collaboration with backend teams.",
+    title: "Associate Software Engineer - Mphasis Ltd",
+    desc: "Working on enterprise AI systems involving LLM-based routing, orchestration workflows, retrieval pipelines, and scalable backend services.",
     className: "md:col-span-2",
     thumbnail: "/exp1.svg",
   },
   {
     id: 2,
-    title: "Frontend Web developer-Jio (Intern)",
-    desc: "Translated various Figma designs into user-friendly and responsive code.Assisted in the development of a web-based platform using React.js, enhancing interactivity.",
+    title: "Web Developer Intern - Reliance Jio",
+    desc: "Converted Figma designs into responsive React interfaces and improved cross-device UI consistency for web-based products.",
     className: "md:col-span-2",
     thumbnail: "/exp1.svg",
   },
-  {
-    id: 3,
-    title: "Student Intern - KJSIT",
-    desc: "Developed a PHP based Media Management System for College Committees, enabling seamless media uploads and an admin-led approval system to ensure content quality and appropriateness. ",
-    className: "md:col-span-2", // change to md:col-span-2
-    thumbnail: "/exp2.svg",
-  },
-  // {
-  //   id: 3,
-  //   title: "Freelance App Dev Project",
-  //   desc: "Led the dev of a mobile app for a client, from initial concept to deployment on app stores.",
-  //   className: "md:col-span-2", // change to md:col-span-2
-  //   thumbnail: "/exp3.svg",
-  // },
-  // {
-  //   id: 4,
-  //   title: "Lead Frontend Developer",
-  //   desc: "Developed and maintained user-facing features using modern frontend technologies.",
-  //   className: "md:col-span-2",
-  //   thumbnail: "/exp4.svg",
-  // },
+
 ];
 
 export const socialMedia = [

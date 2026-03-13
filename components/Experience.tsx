@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from './ui/MovingBorders';
 const Experience = () => {
   return (
-    <div id="work" className="py-20">
+    <div className='py-20 w-full' id="experience">
       <h1 className="heading">
         Work
         <span className="text-purple"> Experience</span>

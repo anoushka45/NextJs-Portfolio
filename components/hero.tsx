@@ -37,22 +37,28 @@ const Hero = () => {
 </div>
 
 <TextGenerateEffect 
-  words='Shaping Concepts into Immersive Digital Experiences' 
+  words='AI Engineer & Full-Stack Developer' 
   className='text-center text-[40px] md:text-4xl lg:text-5xl' 
 />
 
 
-      <p className='bg-clip-text text-transparent bg-gradient-to-r from-pink-200 to-blue-400 hover:from-pink-300 hover:to-blue-500 text-center md:tracking-wider mb-4 text-sm md:text-lg lg:text-2xl relative'>
-  A Web Developer and recent IT graduate passionate about crafting intuitive, user-friendly web applications. I enjoy turning ideas into functional digital experiences. Explore my work to see what I’ve been building!
-</p>
+        <p className="text-center text-white-200 md:tracking-wider mb-4 text-sm md:text-lg lg:text-xl max-w-3xl mx-auto relative z-10">
+        Building intelligent systems with LLMs, retrieval pipelines, and scalable backend architecture.
+        Currently working on enterprise AI workflows and exploring agent-based products that solve real-world problems.
+      </p>
 
   
-
-<a href="/docs/resume_july.pdf" target="_blank" rel="noopener noreferrer">
+<div className="flex justify-center mt-8  gap-2 relative z-10">
+        <a href="#projects">
+          <MagicButton title="View Projects" icon={<FaLocationArrow />} position="right" />
+        </a>
+        <a href="/docs/Anoushka_Vyas_Resume_Mar_2026.pdf" target="_blank" rel="noopener noreferrer">
   <MagicButton title="Show my work" 
     icon={<FaLocationArrow />}
     position='right' />
 </a>
+      </div>
+
 
     </div>
 
