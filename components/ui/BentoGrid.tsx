@@ -108,8 +108,11 @@ export const BentoGridItem = ({
             {title}
           </div>
 
-          {id === 2 && <GlobeDemo />}
-          {id == 3 && (
+          {id === 2 && (
+            <div className="absolute inset-0 z-0">
+              <GlobeDemo />
+            </div>
+          )}          {id == 3 && (
             <div className="flex lg:gap-5 w-fit
           absolute -right-3 lg:-right-2 ">
 
@@ -126,7 +129,7 @@ export const BentoGridItem = ({
               </div>
               <div className="flex flex-col gap-3 w-full">
                 <span className="py-4 px-3 rounded-lg text-center bg-[#10132e]" />
-                {['Tailwind.css', 'Azure' ,  'ExpressJS',].map((item) => (
+                {['Tailwind.css', 'Azure', 'ExpressJS',].map((item) => (
                   <span
                     key={item}
                     className="py-2 lg:py-4 lg:px-3 px-3 text-xs lg:text-base opacity-50 lg:opacity-100 rounded-lg text-center bg-[#10132e] flex-shrink-0"
