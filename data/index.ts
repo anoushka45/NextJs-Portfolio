@@ -1,11 +1,30 @@
 
+export interface ProjectStat {
+  label: string;
+  value: string;
+}
+
+export interface Project {
+  id: number;
+  title: string;
+  des: string;
+  img: string;
+  link: string;
+  category: string;
+  tags: string[];
+  isFeatured?: boolean;
+  stats?: ProjectStat[];
+  caseStudyLink?: string;
+  demoVideoLink?: string;
+}
+
 export const navItems = [
   { name: "Home", link: "/" },
-  { name: "Focus", link: "#about" },
+  { name: "About", link: "#about" },
   { name: "Experience", link: "#experience" },
   { name: "Projects", link: "#projects" },
+  { name: "CortexKitchen", link: "/projects/cortexkitchen" },
   { name: "Skills", link: "#skills" },
-  // { name: "What's Next", link: "#next" },
   { name: "Contact", link: "#contact" },
 ];
 
@@ -73,76 +92,67 @@ export const gridItems = [
   },
 ];
 
-export const projects = [
+export const projects: Project[] = [
   {
     id: 1,
-    title: "DocQuery - Enterprise Knowledge Assistant",
-    des: "A Retrieval-Augmented Generation system for answering questions across multiple PDF documents using semantic search and grounded LLM responses.",
+    title: "CortexKitchen — AI Operations Decision Engine",
+    des: "A 9-node multi-agent decision system for restaurant operations. LangGraph orchestration, RAG-backed complaint intelligence, Prophet demand forecasting, a 5-dimension Critic validation layer, and a full persisted audit trail. Built end-to-end solo across 4 phases.",
     img: "/projects/docQuery.png",
-    link: "https://github.com/anoushka45/PDF_RAG_Assistant",
+    link: "https://github.com/anoushka45/cortexkitchen",
     category: "AI",
-    tags: ["LangChain", "RAG", "Python", "ChromaDB", "LLM"],
+    tags: ["LangGraph", "RAG", "FastAPI", "Qdrant", "PostgreSQL", "Multi-Agent", "Prophet", "Next.js"],
+    isFeatured: true,
+    stats: [
+      { label: "Intelligence Nodes", value: "9" },
+      { label: "Planning Scenarios", value: "4" },
+      { label: "Critic Dimensions", value: "5" },
+      { label: "Vector Collections", value: "2" },
+    ],
+    caseStudyLink: "/projects/cortexkitchen",
+    demoVideoLink: "",
   },
   {
     id: 2,
-    title: "InspireAI - AI Content Generator",
-    des: "An AI-powered content generation platform built with Next.js and Gemini for contextual, high-quality content creation.",
+    title: "DocQuery — Enterprise Knowledge Assistant",
+    des: "A multi-document RAG QA pipeline with semantic chunking, ChromaDB vector search, and grounded, source-attributed answers across heterogeneous document types.",
+    img: "/projects/docQuery.png",
+    link: "https://github.com/anoushka45/PDF_RAG_Assistant",
+    category: "AI",
+    tags: ["LangChain", "RAG", "Python", "ChromaDB", "Groq"],
+    isFeatured: false,
+  },
+  {
+    id: 3,
+    title: "InspireAI — AI Content Generator",
+    des: "A full-stack AI content generation platform with Gemini API, multiple content templates, real-time streaming output, and persistent output history.",
     img: "/projects/InspireAI - AI Content Generator.png",
     link: "https://github.com/anoushka45/AI-Content-Generator-App-",
     category: "AI",
     tags: ["Next.js", "Gemini", "TypeScript", "Tailwind"],
-  },
-  {
-    id: 3,
-    title: "UrbanAura - Modern E-Commerce Platform",
-    des: "A modern full-stack e-commerce experience using Next.js, TypeScript, TailwindCSS, and Sanity CMS.",
-    img: "/projects/urbanAura.png",   
-    link: "https://github.com/anoushka45/UrbanAura-E-commerce-",
-    category: "Full Stack",
-    tags: ["Next.js", "CMS", "TypeScript", "Tailwind"],
+    isFeatured: false,
   },
   {
     id: 4,
+    title: "UrbanAura — E-Commerce Platform",
+    des: "A modern full-stack e-commerce experience using Next.js, TypeScript, TailwindCSS, and Sanity CMS.",
+    img: "/projects/urbanAura.png",
+    link: "https://github.com/anoushka45/UrbanAura-E-commerce-",
+    category: "Full Stack",
+    tags: ["Next.js", "CMS", "TypeScript", "Tailwind"],
+    isFeatured: false,
+  },
+  {
+    id: 5,
     title: "Media Management Portal",
-    des: "A role-based media approval and management portal for uploads, moderation, and organization workflows.",
+    des: "A role-based media approval and management portal for uploads, moderation, and organisation workflows.",
     img: "/projects/mediaNest.png",
     link: "https://github.com/anoushka45/folder-management-portal",
     category: "Full Stack",
     tags: ["PHP", "MySQL", "Admin Workflow", "Media"],
+    isFeatured: false,
   },
 ];
-export const testimonials = [
-  {
-    quote:
-      "Collaborating with Adrian was an absolute pleasure. His professionalism, promptness, and dedication to delivering exceptional results were evident throughout our project. Adrian's enthusiasm for every facet of development truly stands out. If you're seeking to elevate your website and elevate your brand, Adrian is the ideal partner.",
-    name: "Michael Johnson1",
-    title: "Director of AlphaStream Technologies",
-  },
-  {
-    quote:
-      "Collaborating with Adrian was an absolute pleasure. His professionalism, promptness, and dedication to delivering exceptional results were evident throughout our project. Adrian's enthusiasm for every facet of development truly stands out. If you're seeking to elevate your website and elevate your brand, Adrian is the ideal partner.",
-    name: "Michael Johnson2",
-    title: "Director of AlphaStream Technologies",
-  },
-  {
-    quote:
-      "Collaborating with Adrian was an absolute pleasure. His professionalism, promptness, and dedication to delivering exceptional results were evident throughout our project. Adrian's enthusiasm for every facet of development truly stands out. If you're seeking to elevate your website and elevate your brand, Adrian is the ideal partner.",
-    name: "Michael Johnson3",
-    title: "Director of AlphaStream Technologies",
-  },
-  {
-    quote:
-      "Collaborating with Adrian was an absolute pleasure. His professionalism, promptness, and dedication to delivering exceptional results were evident throughout our project. Adrian's enthusiasm for every facet of development truly stands out. If you're seeking to elevate your website and elevate your brand, Adrian is the ideal partner.",
-    name: "Michael Johnson4",
-    title: "Director of AlphaStream Technologies",
-  },
-  {
-    quote:
-      "Collaborating with Adrian was an absolute pleasure. His professionalism, promptness, and dedication to delivering exceptional results were evident throughout our project. Adrian's enthusiasm for every facet of development truly stands out. If you're seeking to elevate your website and elevate your brand, Adrian is the ideal partner.",
-    name: "Michael Johnson5",
-    title: "Director of AlphaStream Technologies",
-  },
-];
+// testimonials removed — placeholder content was deleted for production readiness
 
 export const companies = [
   {

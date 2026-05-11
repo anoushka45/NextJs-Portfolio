@@ -16,8 +16,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Anoushka's Portfolio",
-  description: "Next Js Portfolio",
+  title: "Anoushka Vyas — Software Engineer · LLM Systems · Multi-Agent Orchestration",
+  description: "Software Engineer at Mphasis building production-grade LLM systems, multi-agent orchestration, and hybrid RAG pipelines. Creator of CortexKitchen.",
   icons: {
     icon: "/favicon.ico",
   },
