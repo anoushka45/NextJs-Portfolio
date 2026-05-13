@@ -10,7 +10,7 @@ const Experience = () => {
         <span className="text-purple"> Experience</span>
       </h1>
 
-      <div className="w-full mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="w-full mt-12 flex flex-col gap-6">
         {workExperience.map((card) => (
           <div
             key={card.id}

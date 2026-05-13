@@ -5,21 +5,31 @@ import React from "react";
 export default function Page() {
   return (
     <main className="min-h-screen bg-black-100 text-white px-5 sm:px-10 pb-20">
-      <div className="max-w-5xl mx-auto pt-8">
-        <a href="/#projects" className="text-white-200 text-sm hover:text-white transition">← Back to Projects</a>
+      <div className="max-w-5xl mx-auto pt-8 px-4">
+        <a
+          href="/#projects"
+          className="inline-flex items-center gap-2 text-sm text-neutral-400 hover:text-white transition-all duration-300 group"
+        >
+          <span className="transform transition-transform duration-300 group-hover:-translate-x-1">
+            ←
+          </span>
+
+          <span className="tracking-wide">
+            View Full Portfolio
+          </span>
+        </a>
       </div>
 
       <div className="max-w-5xl mx-auto">
         {/* SECTION 1 — Hero */}
         <section className="py-20">
-          <p className="text-xs uppercase tracking-widest text-purple">Case Study</p>
-          <h1 className="text-5xl md:text-7xl font-bold text-white mt-3">CortexKitchen</h1>
+          <p className="text-xs uppercase tracking-widest text-purple">PROJECT DETAILS</p>
+          <h1 className="text-5xl md:text-7xl font-bold text-white mt-3">Cortex<span className="text-orange-400">Kitchen</span></h1>
           <p className="text-white-200 text-xl mt-5 max-w-2xl leading-8">A 9-node multi-agent decision engine for restaurant operations. LangGraph orchestration, Critic-validated output, RAG-backed intelligence, and a full persisted audit trail.</p>
 
           <div className="flex gap-3 mt-8 flex-wrap">
             <a href="https://github.com/anoushka45/cortexkitchen" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-full border border-white/20 text-white text-sm hover:border-purple transition">GitHub</a>
-            <a href="#" className="px-5 py-2.5 rounded-full bg-purple text-white text-sm hover:bg-purple/80 transition">Demo Video</a>
-            <a href="#" className="px-5 py-2.5 rounded-full border border-white/20 text-white text-sm hover:border-purple transition">Live Demo</a>
+            <a href="#" className="px-5 py-2.5 rounded-full bg-purple text-black font-semibold text-sm hover:bg-purple/80 transition">Demo Video</a>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-14">
@@ -41,6 +51,11 @@ export default function Page() {
             </div>
           </div>
         </section>
+
+        {/* Project image */}
+        <div className="w-full rounded-2xl overflow-hidden border border-white/10 mb-2">
+          <img src="/projects/ck.png" alt="CortexKitchen dashboard" className="w-full h-auto object-cover" />
+        </div>
 
         {/* SECTION 2 — The Problem */}
         <section className="py-20 border-t border-white/10">
@@ -71,22 +86,212 @@ export default function Page() {
           <h2 className="text-3xl md:text-4xl font-bold text-white mt-3">A stateful orchestration graph — not a chatbot.</h2>
           <p className="text-white-200 mt-4 max-w-3xl leading-7">CortexKitchen is built on LangGraph — a stateful DAG where each node receives a typed OrchestratorState, updates its output key, and passes state forward. Deterministic services handle structured computation: Prophet for forecasting, SQL aggregations for reservation pressure, rule-based logic for inventory alerts. The LLM is introduced only where it adds value — synthesis, interpretation, and evaluation.</p>
 
-          <div className="rounded-2xl bg-black-200 border border-white/10 p-6 mt-10 overflow-x-auto">
-            <div className="text-xs text-white-200 mb-1 text-center">concurrent superstep</div>
-            <div className="flex items-center justify-center flex-wrap gap-2">
-              <span className="px-3 py-1.5 rounded-full border border-white/20 bg-black-100 text-sm">Ops Manager</span>
-              <span className="text-white-200 text-xs mx-2">→</span>
-              <span className="px-3 py-1.5 rounded-full border border-white/20 bg-black-100 text-sm">Demand Forecast</span>
-              <span className="text-white-200 text-xs mx-2">→</span>
-              <span className="px-3 py-1.5 rounded-full border border-purple/30 text-purple/80 bg-black-100 text-sm whitespace-nowrap">Reservation · Complaint Intel · Menu Intel · Inventory</span>
-              <span className="text-white-200 text-xs mx-2">→</span>
-              <span className="px-3 py-1.5 rounded-full border border-white/20 bg-black-100 text-sm">Aggregator</span>
-              <span className="text-white-200 text-xs mx-2">→</span>
-              <span className="px-3 py-1.5 rounded-full border border-white/20 bg-black-100 text-sm">Critic</span>
-              <span className="text-white-200 text-xs mx-2">→</span>
-              <span className="px-3 py-1.5 rounded-full border border-white/20 bg-black-100 text-sm">Final Assembler</span>
+         
+{/* ARCHITECTURE FLOW */}
+
+<div className="relative mt-16 rounded-[34px] border border-white/10 bg-[#050505] p-8 md:p-12 overflow-hidden">
+
+  {/* background glows */}
+  <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[500px] w-[500px] bg-cyan-400/10 blur-[140px]" />
+  <div className="absolute bottom-0 right-0 h-[300px] w-[300px] bg-purple/10 blur-[120px]" />
+
+  {/* grid */}
+  <div className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:42px_42px]" />
+
+  <div className="relative z-10">
+
+    {/* top label */}
+    <div className="flex justify-center mb-14">
+      <div className="px-5 py-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 backdrop-blur-xl">
+        <p className="text-[11px] tracking-[0.35em] uppercase text-cyan-200 font-medium">
+          LangGraph Stateful Topology
+        </p>
+      </div>
+    </div>
+
+    {/* graph */}
+    <div className="flex flex-col items-center">
+
+      {/* ops manager */}
+      <div className="relative group">
+        <div className="absolute inset-0 bg-cyan-400/20 blur-3xl opacity-70" />
+
+        <div className="relative rounded-3xl border border-cyan-400/30 bg-[#0d0d0d]/90 backdrop-blur-xl px-6 py-4 min-w-[220px] text-center shadow-[0_0_60px_rgba(34,211,238,0.15)]">
+          <div className="flex justify-center mb-3">
+            <div className="w-3 h-3 rounded-full bg-cyan-300 animate-pulse shadow-[0_0_20px_rgba(34,211,238,0.9)]" />
+          </div>
+
+          <p className="text-white text-sm font-semibold">
+            Ops Manager
+          </p>
+
+          <p className="text-[11px] text-white/40 mt-1.5 tracking-wide">
+            orchestration entrypoint
+          </p>
+        </div>
+      </div>
+
+      {/* connector */}
+      <div className="relative w-[2px] h-20 bg-gradient-to-b from-cyan-400/70 to-blue-400/20">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-cyan-300 shadow-[0_0_25px_rgba(34,211,238,0.8)]" />
+      </div>
+
+      {/* forecast */}
+      <div className="relative">
+        <div className="absolute inset-0 bg-blue-400/20 blur-3xl opacity-70" />
+
+        <div className="relative rounded-3xl border border-blue-400/30 bg-[#0d0d0d]/90 px-6 py-4 min-w-[220px] text-center shadow-[0_0_60px_rgba(59,130,246,0.12)]">
+          <p className="text-white text-sm font-semibold">
+            Demand Forecast
+          </p>
+
+          <p className="text-[11px] text-white/40 mt-1.5 tracking-wide">
+            prophet · predictive calibration
+          </p>
+        </div>
+      </div>
+
+      {/* split */}
+      <div className="relative flex flex-col items-center">
+
+        <div className="w-[2px] h-16 bg-gradient-to-b from-blue-400/70 to-cyan-400/20" />
+
+        <div className="w-[65vw] max-w-[850px] h-[2px] bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent relative">
+
+          <div className="absolute left-[12%] top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-cyan-300 shadow-[0_0_20px_rgba(34,211,238,0.8)]" />
+          <div className="absolute left-[38%] top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-cyan-300 shadow-[0_0_20px_rgba(34,211,238,0.8)]" />
+          <div className="absolute right-[38%] top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-cyan-300 shadow-[0_0_20px_rgba(34,211,238,0.8)]" />
+          <div className="absolute right-[12%] top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-cyan-300 shadow-[0_0_20px_rgba(34,211,238,0.8)]" />
+
+        </div>
+
+        <div className="mt-3 text-[11px] uppercase tracking-[0.3em] text-cyan-200/60">
+          concurrent superstep
+        </div>
+      </div>
+
+      {/* parallel agents */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 mt-10 w-full max-w-6xl">
+
+        {[
+          {
+            title: "Reservation Intel",
+            desc: "reservation pressure analysis",
+            glow: "cyan",
+          },
+          {
+            title: "Complaint Intel",
+            desc: "RAG + complaint synthesis",
+            glow: "blue",
+          },
+          {
+            title: "Menu Intelligence",
+            desc: "sales & promotion insights",
+            glow: "emerald",
+          },
+          {
+            title: "Inventory Agent",
+            desc: "stock risk & shortages",
+            glow: "orange",
+          },
+        ].map((agent) => (
+          <div
+            key={agent.title}
+            className="group relative"
+          >
+
+            <div className="absolute inset-0 rounded-[28px] bg-cyan-400/10 blur-2xl opacity-0 group-hover:opacity-100 transition duration-500" />
+
+            <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-[#0d0d0d]/95 p-4 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-cyan-300/30">
+
+              {/* top line */}
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-2.5 h-2.5 rounded-full bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.9)]" />
+                <div className="h-[1px] flex-1 bg-gradient-to-r from-cyan-400/40 to-transparent" />
+              </div>
+
+              <h3 className="text-white text-sm font-semibold">
+                {agent.title}
+              </h3>
+
+              <p className="text-xs text-white/45 mt-2 leading-5">
+                {agent.desc}
+              </p>
+
+              {/* subtle corner glow */}
+              <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-400/5 blur-2xl" />
+
             </div>
           </div>
+        ))}
+
+      </div>
+
+      {/* merge line */}
+      <div className="relative flex flex-col items-center mt-10">
+
+        <div className="w-[65vw] max-w-[850px] h-[2px] bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent relative">
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-emerald-300 shadow-[0_0_24px_rgba(52,211,153,0.9)]" />
+        </div>
+
+        <div className="w-[2px] h-16 bg-gradient-to-b from-emerald-400/70 to-white/10" />
+
+      </div>
+
+      {/* final stack */}
+      <div className="flex flex-col items-center gap-6 w-full max-w-md">
+
+        {[
+          {
+            title: "Aggregator",
+            desc: "merge & reconcile outputs",
+            border: "border-emerald-400/30",
+          },
+          {
+            title: "Critic Agent",
+            desc: "governance & evaluation",
+            border: "border-orange-400/30",
+          },
+          {
+            title: "Final Assembler",
+            desc: "response synthesis layer",
+            border: "border-white/20",
+          },
+        ].map((node) => (
+          <div key={node.title} className="relative w-full group">
+
+            <div className="absolute inset-0 bg-white/5 blur-3xl opacity-40" />
+
+            <div
+              className={`relative rounded-[28px] ${node.border} border bg-[#0d0d0d]/95 backdrop-blur-xl p-4 transition-all duration-300 hover:-translate-y-1`}
+            >
+
+              <div className="flex items-center gap-4">
+
+                <div className="w-3 h-3 rounded-full bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.9)]" />
+
+                <div>
+                  <h3 className="text-white text-sm font-semibold">
+                    {node.title}
+                  </h3>
+
+                  <p className="text-xs text-white/45 mt-1">
+                    {node.desc}
+                  </p>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        ))}
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
             <div className="rounded-2xl bg-black-200 border border-white/10 p-6">
@@ -197,9 +402,9 @@ export default function Page() {
 
           <div className="flex items-center justify-center gap-3 mt-10 flex-wrap">
             <div className="px-5 py-2 rounded-full border border-green-400/30 text-green-300 bg-green-400/10 text-sm font-medium">Approved</div>
-            <div className="text-white-200">→</div>
+            <div className="text-white-200">.</div>
             <div className="px-5 py-2 rounded-full border border-yellow-400/30 text-yellow-300 bg-yellow-400/10 text-sm font-medium">Revision</div>
-            <div className="text-white-200">→</div>
+            <div className="text-white-200">.</div>
             <div className="px-5 py-2 rounded-full border border-red-400/30 text-red-300 bg-red-400/10 text-sm font-medium">Rejected</div>
           </div>
 
@@ -219,7 +424,7 @@ export default function Page() {
             <div className="rounded-2xl bg-black-200 border border-white/10 p-6">
               <h3 className="font-semibold text-white mb-3">Retrieval Flow</h3>
               <div className="text-sm text-white-200 leading-7">
-                <div className="text-purple">→</div>
+                <div className="text-purple"></div>
                 <div>Query constructed from operational context (e.g. "pizza delivery delays, slow service, Friday evening")</div>
                 <div className="mt-2">→ Query embedded and passed to Qdrant cosine similarity search</div>
                 <div className="mt-2">→ Top-k complaints retrieved with similarity scores</div>
@@ -367,7 +572,7 @@ export default function Page() {
           <p className="text-white-200 mt-4 max-w-xl mx-auto">The full system runs locally with Docker Compose. Architecture docs, data model, API contracts, and the evaluation rubric are all in the repo.</p>
 
           <div className="flex justify-center gap-4 mt-8 flex-wrap">
-            <a href="https://github.com/anoushka45/cortexkitchen" target="_blank" rel="noopener noreferrer" className="px-6 py-3 rounded-full bg-purple text-white text-sm font-medium hover:bg-purple/80 transition">View on GitHub</a>
+            <a href="https://github.com/anoushka45/cortexkitchen" target="_blank" rel="noopener noreferrer" className="px-6 py-3 rounded-full bg-purple text-black font-semibold text-sm font-medium hover:bg-purple/80 transition">View on GitHub</a>
             <a href="mailto:vyasanoushka@gmail.com" className="px-6 py-3 rounded-full border border-white/20 text-white text-sm hover:border-purple transition">Get in Touch</a>
             <a href="#" className="px-6 py-3 rounded-full border border-white/20 text-white text-sm hover:border-purple transition">Demo Video</a>
           </div>

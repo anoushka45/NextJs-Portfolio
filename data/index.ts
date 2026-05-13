@@ -95,7 +95,7 @@ export const projects: Project[] = [
     id: 1,
     title: "CortexKitchen — AI Operations Decision Engine",
     des: "A 9-node multi-agent decision system for restaurant operations. LangGraph orchestration, RAG-backed complaint intelligence, Prophet demand forecasting, a 5-dimension Critic validation layer, and a full persisted audit trail. Built end-to-end solo across 4 phases.",
-    img: "/projects/docQuery.png",
+    img: "/projects/ck.png",
     link: "https://github.com/anoushka45/cortexkitchen",
     category: "AI",
     tags: ["LangGraph", "RAG", "FastAPI", "Qdrant", "PostgreSQL", "Multi-Agent", "Prophet", "Next.js"],

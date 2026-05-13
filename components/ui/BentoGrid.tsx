@@ -120,11 +120,14 @@ export const BentoGridItem = ({
             <div className="flex flex-wrap gap-2 justify-center mt-4 z-10 relative">
               {[
                 { name: "LangGraph", dot: "bg-purple" },
-                { name: "FastAPI", dot: "bg-sky-400" },
+                { name: "LangChain", dot: "bg-purple" },
+                { name: "RAG Pipelines", dot: "bg-purple" },
                 { name: "Python", dot: "bg-sky-400" },
-                { name: "Qdrant", dot: "bg-purple" },
+                { name: "FastAPI", dot: "bg-sky-400" },
+                { name: "Docker", dot: "bg-sky-400" },
+                { name: "Vector Databases", dot: "bg-purple" },
                 { name: "PostgreSQL", dot: "bg-sky-400" },
-                { name: "Next.js", dot: "bg-white/50" },
+                { name: "React / Next.js", dot: "bg-white/50" },
               ].map((item) => (
                 <span
                   key={item.name}
@@ -142,17 +145,17 @@ export const BentoGridItem = ({
               <div className="absolute top-0 right-0 w-32 h-32 bg-purple/10 blur-3xl rounded-full pointer-events-none" />
               <div className="absolute bottom-4 left-0 w-24 h-24 bg-sky-400/[0.06] blur-2xl rounded-full pointer-events-none" />
 
-              <div className="pl-5 border-l-2 border-purple/50">
-                <p className="text-xs uppercase tracking-[0.18em] text-purple/70 mb-3">Engineering mindset</p>
-                <p className="text-white/90 text-base md:text-lg font-bold leading-snug">
+              <div className="pl-5 border-l-[3px] border-purple/60">
+                <p className="text-xs uppercase tracking-[0.18em] text-purple/70 mb-4">Engineering mindset</p>
+                <p className="text-white text-lg md:text-xl font-bold leading-snug">
                   I think carefully about where a model belongs in a system, and where it does not.
                 </p>
-                <p className="text-white/50 text-sm mt-3 leading-6">
+                <p className="text-white/50 text-sm mt-4 leading-7">
                   Most reliability problems in production AI are architectural. Getting that boundary right separates a working prototype from something you can actually depend on.
                 </p>
               </div>
 
-              <div className="border-t border-white/[0.07]" />
+              <div className="border-t border-white/[0.07] my-2" />
 
               <div>
                 <p className="text-white font-bold text-xl md:text-2xl leading-snug">

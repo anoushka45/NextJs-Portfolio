@@ -3,11 +3,11 @@ import React from "react";
 const skillGroups = [
   {
     title: "AI / LLM",
-    items: ["LangChain", "LangGraph", "RAG Pipelines", "Azure OpenAI", "Gemini", "Prompt Engineering", "Vector Search"],
+    items: ["LangChain", "LangGraph", "RAG Pipelines", "Prompt Engineering", "Vector Databases", "Azure OpenAI", "Gemini", "Claude", "Groq", "Llama", "Open Source Models"],
   },
   {
     title: "Backend",
-    items: ["Python", "FastAPI", "Node.js", "Express.js", "REST APIs"],
+    items: ["Python", "FastAPI", "Node.js", "Express.js", "Docker", "REST APIs"],
   },
   {
     title: "Frontend",
@@ -15,7 +15,7 @@ const skillGroups = [
   },
   {
     title: "Databases & Tools",
-    items: ["PostgreSQL", "MySQL", "MongoDB", "Git", "Postman", "Vercel"],
+    items: ["PostgreSQL", "MySQL", "MongoDB", "Qdrant", "ChromaDB", "Git", "GitHub", "Postman", "Vercel"],
   },
 ];
 
