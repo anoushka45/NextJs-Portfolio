@@ -36,20 +36,19 @@ const Hero = () => {
           </div>
 
           <TextGenerateEffect
-            words="Software Engineer · LLM Systems"
+            words="Software Engineer · LLM Systems · AI Orchestration"
             className="text-center text-[40px] md:text-4xl lg:text-5xl"
           />
 
           <p className="text-center text-white-200 md:tracking-wider mb-4 text-sm md:text-lg lg:text-xl max-w-3xl mx-auto relative z-10">
-            I design and build production-grade LLM systems, multi-agent orchestration,
-            and hybrid RAG pipelines. Side project: CortexKitchen — a multi-agent
-            decision engine for restaurant operations.
+            Hi — I’m Anoushka Vyas. I build production-minded AI systems focused on
+            orchestration, evaluation, and real-world decision workflows. My work
+            combines LLM reasoning, RAG pipelines, and full-stack engineering to
+            create systems that are explainable, reliable, and designed for
+            operational use.
           </p>
 
           <div className="flex justify-center flex-wrap gap-3 relative z-10 mt-6">
-            <a href="/projects/cortexkitchen">
-              <MagicButton title="View CortexKitchen" icon={<FaLocationArrow />} position="right" />
-            </a>
             <a href="https://github.com/anoushka45" target="_blank" rel="noopener noreferrer">
               <MagicButton title="GitHub" icon={<FaLocationArrow />} position="right" otherClasses="!bg-black-200" />
             </a>
