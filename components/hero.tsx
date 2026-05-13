@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaLocationArrow, FaPlay } from 'react-icons/fa';
+import { FaLocationArrow } from 'react-icons/fa';
 import { TextGenerateEffect } from './ui/text-generate-effect';
 import { Spotlight } from './ui/spotlight';
 import MagicButton from './ui/MagicButton';
@@ -29,23 +29,19 @@ const Hero = () => {
 
           <div className="flex justify-center relative z-10 my-10">
             <div className="text-center text-[40px] md:text-4xl lg:text-6xl flex flex-col items-center justify-center">
-              <p className="bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-pink-300 font-bold hover:from-pink-400 hover:to-violet-600 hover:shadow-lg transition-all duration-800 ease-in-out hover:cursor-pointer">
+              <p className="bg-clip-text text-transparent bg-gradient-to-r from-white to-purple font-bold transition-all duration-500 ease-in-out hover:cursor-pointer">
                 ANOUSHKA VYAS
               </p>
             </div>
           </div>
 
           <TextGenerateEffect
-            words="Software Engineer · LLM Systems · AI Orchestration"
+            words="Building the infrastructure behind reliable AI systems."
             className="text-center text-[40px] md:text-4xl lg:text-5xl"
           />
 
           <p className="text-center text-white-200 md:tracking-wider mb-4 text-sm md:text-lg lg:text-xl max-w-3xl mx-auto relative z-10">
-            Hi — I’m Anoushka Vyas. I build production-minded AI systems focused on
-            orchestration, evaluation, and real-world decision workflows. My work
-            combines LLM reasoning, RAG pipelines, and full-stack engineering to
-            create systems that are explainable, reliable, and designed for
-            operational use.
+            I work on orchestration, retrieval, agent workflows, and backend systems that turn language models into usable products. Coming from a full-stack background, I&apos;m especially interested in the engineering challenges behind modern AI systems: making them reliable, grounded, and practical beyond controlled demos.
           </p>
 
           <div className="flex justify-center flex-wrap gap-3 relative z-10 mt-6">
@@ -55,15 +51,12 @@ const Hero = () => {
             <a href="/docs/Anoushka_Vyas_Resume_Mar_2026.pdf" target="_blank" rel="noopener noreferrer">
               <MagicButton title="Resume" icon={<FaLocationArrow />} position="right" otherClasses="!bg-black-200" />
             </a>
-            <a href="" target="_blank" rel="noopener noreferrer">
-              <MagicButton id="demo-video-btn" title="Demo Video" icon={<FaPlay />} position="right" otherClasses="!bg-black-200" />
-            </a>
           </div>
 
           <div className="flex justify-center">
             <div className="inline-flex items-center gap-2 bg-black-200 border border-white/10 rounded-full px-5 py-2.5 mt-6 relative z-10">
               <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              <span className="text-white-200 text-sm">CortexKitchen · Phase 3 complete · 4 planning scenarios live</span>
+              <span className="text-white-200 text-sm">AI Engineer · LLM Systems · Backend Engineering</span>
             </div>
           </div>
 

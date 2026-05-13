@@ -23,7 +23,6 @@ export const navItems = [
   { name: "About", link: "#about" },
   { name: "Experience", link: "#experience" },
   { name: "Projects", link: "#projects" },
-  { name: "CortexKitchen", link: "/projects/cortexkitchen" },
   { name: "Skills", link: "#skills" },
   { name: "Contact", link: "#contact" },
 ];
@@ -31,12 +30,12 @@ export const navItems = [
 export const gridItems = [
   {
     id: 1,
-    title: "I build intelligent systems with a strong focus on real-world usability, backend architecture, and AI-driven workflows.",
+    title: "I design AI systems where the interesting problem is the one after it works: making agents reliable, outputs grounded, and decisions auditable.",
     description: "What I work on",
     className: "lg:col-span-3 md:col-span-6 md:row-span-4 lg:min-h-[60vh]",
     imgClassName: "w-full h-full",
     titleClassName: "justify-end",
-    img: "/b1.svg",
+    img: "/bento/banner.png",
     spareImg: "",
   },
   {
@@ -71,9 +70,9 @@ export const gridItems = [
   },
   {
     id: 5,
-    title: "Currently focused on enterprise AI systems, retrieval pipelines, and scalable backend services.",
+    title: "I think carefully about where a model belongs in a system, and where it does not.",
     description:
-      "My current work spans LLM-based orchestration, FastAPI services, routing workflows, and real-world AI product development.",
+      "Most reliability problems in production AI are architectural. Getting that boundary right is what separates a working prototype from something you can actually depend on.",
     className: "md:col-span-3 md:row-span-2",
     imgClassName: "absolute right-0 bottom-0 md:w-96 w-60 hidden md:block",
     titleClassName: "justify-center md:justify-start lg:justify-center",
@@ -109,7 +108,7 @@ export const projects: Project[] = [
       { label: "Vector Collections", value: "2" },
     ],
     caseStudyLink: "/projects/cortexkitchen",
-    demoVideoLink: "",
+    demoVideoLink: undefined,
   },
   {
     id: 2,
@@ -152,56 +151,21 @@ export const projects: Project[] = [
     isFeatured: false,
   },
 ];
-// testimonials removed — placeholder content was deleted for production readiness
-
-export const companies = [
-  {
-    id: 1,
-    name: "nuskia",
-    img: "/b1.svg",
-    nameImg: "/cloudName.svg",
-  },
-  {
-    id: 2,
-    name: "ape",
-    img: "/app.svg",
-    nameImg: "/appName.svg",
-  },
-  {
-    id: 3,
-    name: "HOSTINGER",
-    img: "/host.svg",
-    nameImg: "/hostName.svg",
-  },
-  {
-    id: 4,
-    name: "stream",
-    img: "/s.svg",
-    nameImg: "/streamName.svg",
-  },
-  {
-    id: 5,
-    name: "docker.",
-    img: "/dock.svg",
-    nameImg: "/dockerName.svg",
-  },
-];
-
 export const workExperience = [
   {
     id: 1,
     title: "Associate Software Engineer - Mphasis Ltd",
-    desc: "Working on enterprise AI systems involving LLM-based routing, orchestration workflows, retrieval pipelines, and scalable backend services.",
+    desc: "Designing and building enterprise AI systems: multi-agent orchestration with LangGraph, LLM-based intent routing and classification, and hybrid RAG pipelines combining vector search with structured retrieval. Own the full lifecycle from system design and prompt engineering through evaluation, backend integration with FastAPI, and production deployment. Core focus on agent reliability, retrieval accuracy, and making AI decisions explainable to stakeholders.",
     className: "md:col-span-2",
     thumbnail: "/exp1.svg",
   },
-  {
-    id: 2,
-    title: "Web Developer Intern - Reliance Jio",
-    desc: "Converted Figma designs into responsive React interfaces and improved cross-device UI consistency for web-based products.",
-    className: "md:col-span-2",
-    thumbnail: "/exp1.svg",
-  },
+  // {
+  //   id: 2,
+  //   title: "Web Developer Intern - Reliance Jio",
+  //   desc: "Converted Figma designs into responsive React interfaces and improved cross-device UI consistency for web-based products.",
+  //   className: "md:col-span-2",
+  //   thumbnail: "/exp2.svg",
+  // },
 
 ];
 
@@ -223,12 +187,3 @@ export const socialMedia = [
   },
 ];
 
-// Define your tech stack icons here
-export const techStackIcons = [
-  "/re.svg", // React
-  "/tail.svg", // Tailwind CSS
-  "/ts.svg", // TypeScript
-  "/fm.svg", // Firebase (or any other)
-  "/next.svg", // Next.js
-  // Docker (if applicable)
-];

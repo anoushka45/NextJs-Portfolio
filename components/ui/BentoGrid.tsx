@@ -72,17 +72,17 @@ export const BentoGridItem = ({
             <img
               src={img}
               alt={img}
-              className={cn(imgClassName, "object-cover object-center ")}
+              className={cn(imgClassName, "object-cover object-center opacity-50")}
             />
           )}
         </div>
-        <div className={`absolute right-0 -bottom-5 ${id == 5 && 'w-full opacity-80'}`}>
+        <div className={`absolute right-0 -bottom-5 ${id == 5 && 'w-full opacity-40'}`}>
           {
             spareImg && (
               <img
                 src={spareImg}
                 alt={spareImg}
-                className={`object-cover,object-center ,w-full h-full`}
+                className={`object-cover object-center w-full h-full opacity-50`}
 
               />
 
@@ -113,33 +113,39 @@ export const BentoGridItem = ({
               <GlobeDemo />
             </div>
           )}          {id == 3 && (
-            <div className="flex lg:gap-5 w-fit
-          absolute -right-3 lg:-right-2 ">
-
+            <div className="flex lg:gap-5 w-fit absolute -right-3 lg:-right-2">
               <div className="flex flex-col gap-3 w-full">
-                {["Python", "FastAPI", "LangChain"].map((item) => (
+                {[
+                  { name: "LangGraph", dot: "bg-purple" },
+                  { name: "FastAPI", dot: "bg-sky-400" },
+                  { name: "Python", dot: "bg-sky-400" },
+                ].map((item) => (
                   <span
-                    key={item}
-                    className="py-2 lg:py-4 lg:px-3 px-3 text-xs lg:text-base opacity-50 lg:opacity-100 rounded-lg text-center bg-[#10132e] flex-shrink-0"
+                    key={item.name}
+                    className="py-2 lg:py-3 lg:px-3 px-3 text-xs lg:text-sm rounded-xl text-center bg-[#10132e] border border-white/[0.08] flex-shrink-0 flex items-center gap-2 justify-center text-white/80"
                   >
-                    {item}
+                    <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.dot}`} />
+                    {item.name}
                   </span>
                 ))}
-                <span className="py-4 px-3 rounded-lg text-center bg-[#10132e]" />
+                <span className="py-3 px-3 rounded-xl bg-[#10132e] border border-white/[0.04]" />
               </div>
               <div className="flex flex-col gap-3 w-full">
-                <span className="py-4 px-3 rounded-lg text-center bg-[#10132e]" />
-                {['Tailwind.css', 'Azure', 'ExpressJS',].map((item) => (
+                <span className="py-3 px-3 rounded-xl bg-[#10132e] border border-white/[0.04]" />
+                {[
+                  { name: "Qdrant", dot: "bg-purple" },
+                  { name: "PostgreSQL", dot: "bg-sky-400" },
+                  { name: "Next.js", dot: "bg-white/60" },
+                ].map((item) => (
                   <span
-                    key={item}
-                    className="py-2 lg:py-4 lg:px-3 px-3 text-xs lg:text-base opacity-50 lg:opacity-100 rounded-lg text-center bg-[#10132e] flex-shrink-0"
+                    key={item.name}
+                    className="py-2 lg:py-3 lg:px-3 px-3 text-xs lg:text-sm rounded-xl text-center bg-[#10132e] border border-white/[0.08] flex-shrink-0 flex items-center gap-2 justify-center text-white/80"
                   >
-                    {item}
+                    <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.dot}`} />
+                    {item.name}
                   </span>
                 ))}
               </div>
-
-
             </div>
           )}
 
