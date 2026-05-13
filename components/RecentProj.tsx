@@ -63,7 +63,7 @@ const RecentProj = () => {
           )}
 
           <div className="flex flex-wrap gap-3 mt-8">
-            <a href={featured.caseStudyLink} className="px-5 py-2.5 rounded-full bg-purple text-white text-sm font-medium hover:bg-purple/80 transition">
+            <a href={featured.caseStudyLink} className="px-5 py-2.5 rounded-full bg-purple text-black-100 text-sm font-semibold hover:bg-purple/80 transition">
               View Case Study
             </a>
             <a href={featured.link} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-full border border-white/20 text-white-200 text-sm hover:border-white/40 transition">
@@ -85,7 +85,7 @@ const RecentProj = () => {
             onClick={() => setActiveFilter(filter)}
             className={`px-5 py-2 rounded-full border text-sm transition ${
               activeFilter === filter
-                ? "bg-purple text-white border-purple"
+                ? "bg-purple text-black-100 border-purple font-semibold"
                 : "bg-black-200 text-white-200 border-white/10"
             }`}
           >
