@@ -72,7 +72,7 @@ export const BentoGridItem = ({
             <img
               src={img}
               alt={img}
-              className={cn(imgClassName, "object-cover object-center opacity-50")}
+              className={cn(imgClassName, "object-cover object-center opacity-30")}
             />
           )}
         </div>
@@ -82,7 +82,7 @@ export const BentoGridItem = ({
               <img
                 src={spareImg}
                 alt={spareImg}
-                className={`object-cover object-center w-full h-full opacity-50`}
+                className={`object-cover object-center w-full h-full opacity-40`}
 
               />
 
@@ -140,33 +140,39 @@ export const BentoGridItem = ({
             </div>
           )}
 
-          {id === 5 && (
-            <div className="z-10 relative flex flex-col gap-6 h-full">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-purple/10 blur-3xl rounded-full pointer-events-none" />
-              <div className="absolute bottom-4 left-0 w-24 h-24 bg-sky-400/[0.06] blur-2xl rounded-full pointer-events-none" />
+        {id === 5 && (
+  <div className="relative z-10 flex h-full flex-col justify-between gap-7 overflow-hidden">
+    <div className="absolute -top-6 right-0 h-32 w-32 rounded-full bg-purple/10 blur-3xl pointer-events-none" />
+    <div className="absolute bottom-0 left-0 h-24 w-24 rounded-full bg-sky-400/[0.05] blur-2xl pointer-events-none" />
 
-              <div className="pl-5 border-l-[3px] border-purple/60">
-                <p className="text-xs uppercase tracking-[0.18em] text-purple/70 mb-4">Engineering mindset</p>
-                <p className="text-white text-lg md:text-xl font-bold leading-snug">
-                  I think carefully about where a model belongs in a system, and where it does not.
-                </p>
-                <p className="text-white/50 text-sm mt-4 leading-7">
-                  Most reliability problems in production AI are architectural. Getting that boundary right separates a working prototype from something you can actually depend on.
-                </p>
-              </div>
+    <div className="pl-5 border-l-[3px] border-purple/60">
+      <p className="mb-3 text-[11px] uppercase tracking-[0.22em] text-purple/70">
+        How I Think
+      </p>
 
-              <div className="border-t border-white/[0.07] my-2" />
+      <h3 className="text-[1.35rem] md:text-[1.55rem] font-semibold leading-[1.45] text-white">
+        I enjoy building systems that feel clean, useful, and reliable.
+      </h3>
 
-              <div>
-                <p className="text-white font-bold text-xl md:text-2xl leading-snug">
-                  The never-ending possibilities.
-                </p>
-                <p className="text-white/50 text-sm mt-3 leading-7">
-                  Every problem in AI unlocks three more. The field moves fast enough that there&apos;s always something genuinely new to figure out — and just enough structure to build on.
-                </p>
-              </div>
-            </div>
-          )}
+      <p className="mt-4 text-md leading-7 text-white/50 max-w-lg">
+        Whether it’s AI workflows, backend architecture, or frontend UX, I like
+        understanding how all the moving pieces connect — and where things can
+        quietly break at scale.
+      </p>
+    </div>
+
+    <div className="border-t border-white/[0.06] pt-5">
+      <p className="text-[1.35rem] md:text-[1.55rem] font-semibold leading-[1.45] text-white">
+        The fun part is <span className="text-pink-400"> figuring things out.</span>
+      </p>
+
+      <p className="mt-3 text-md leading-7 text-white/50 max-w-xl">
+        New tools, unfamiliar systems, weird bugs, changing technologies 
+        that’s usually where I learn the fastest and enjoy the work the most.
+      </p>
+    </div>
+  </div>
+)}
 
           {id === 6 && (
             <div className="mt-5 relative">

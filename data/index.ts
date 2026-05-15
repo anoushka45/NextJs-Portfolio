@@ -35,7 +35,7 @@ export const gridItems = [
     className: "lg:col-span-3 md:col-span-6 md:row-span-4 lg:min-h-[60vh]",
     imgClassName: "w-full h-full",
     titleClassName: "justify-end",
-    img: "/b1.svg",
+    img: "/bento/aha.jpg",
     spareImg: "",
   },
   {
@@ -139,21 +139,21 @@ export const projects: Project[] = [
     tags: ["Next.js", "CMS", "TypeScript", "Tailwind"],
     isFeatured: false,
   },
-  {
-    id: 5,
-    title: "Media Management Portal",
-    des: "A role-based media approval and management portal for uploads, moderation, and organisation workflows.",
-    img: "/projects/mediaNest.png",
-    link: "https://github.com/anoushka45/folder-management-portal",
-    category: "Full Stack",
-    tags: ["PHP", "MySQL", "Admin Workflow", "Media"],
-    isFeatured: false,
-  },
+  // {
+  //   id: 5,
+  //   title: "Media Management Portal",
+  //   des: "A role-based media approval and management portal for uploads, moderation, and organisation workflows.",
+  //   img: "/projects/mediaNest.png",
+  //   link: "https://github.com/anoushka45/folder-management-portal",
+  //   category: "Full Stack",
+  //   tags: ["PHP", "MySQL", "Admin Workflow", "Media"],
+  //   isFeatured: false,
+  // },
 ];
 export const workExperience = [
   {
     id: 1,
-    title: "Associate Software Engineer - Mphasis Ltd",
+    title: "Software Engineer - Mphasis Ltd",
     desc: "Designing and building enterprise AI systems: multi-agent orchestration with LangGraph, LLM-based intent routing and classification, and hybrid RAG pipelines combining vector search with structured retrieval. Own the full lifecycle from system design and prompt engineering through evaluation, backend integration with FastAPI, and production deployment. Core focus on agent reliability, retrieval accuracy, and making AI decisions explainable to stakeholders.",
     className: "md:col-span-2",
     thumbnail: "/exp1.svg",
