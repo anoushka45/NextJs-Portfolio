@@ -6,18 +6,27 @@ export default function Page() {
   return (
     <main className="min-h-screen bg-black-100 text-white px-5 sm:px-10 pb-20">
      <div className="max-w-5xl mx-auto pt-8 ">
-  <a
-    href="/#projects"
-    className="group inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-neutral-300 backdrop-blur-md transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white hover:shadow-[0_0_30px_rgba(255,255,255,0.06)]"
-  >
-    <span className="text-base transition-transform duration-300 group-hover:-translate-x-1">
-      ←
-    </span>
+<a
+  href="/#projects"
+  className="group relative inline-flex items-center overflow-hidden rounded-full border border-white/10 bg-white/[0.03] px-6 py-2 text-sm font-medium text-neutral-200 backdrop-blur-xl transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white hover:shadow-[0_0_40px_rgba(255,255,255,0.08)]"
+>
+  {/* subtle glow */}
+  <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+    <div className="absolute -left-10 top-0 h-full w-24 rotate-12 bg-white/10 blur-2xl" />
+  </div>
 
-    <span className="tracking-wide">
-      View Full Portfolio
-    </span>
-  </a>
+  {/* tiny dot */}
+  <div className="mr-3 h-2 w-2 rounded-full bg-orange-400 shadow-[0_0_14px_rgba(251,146,60,0.9)]" />
+
+  <span className="relative tracking-[0.18em] uppercase text-[11px]">
+    View Full Portfolio
+  </span>
+
+  {/* hover arrow */}
+  <span className="relative ml-3 text-base opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100">
+    →
+  </span>
+</a>
 </div>
 
       <div className="max-w-5xl mx-auto">
