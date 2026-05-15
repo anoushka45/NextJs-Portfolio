@@ -5,20 +5,20 @@ import React from "react";
 export default function Page() {
   return (
     <main className="min-h-screen bg-black-100 text-white px-5 sm:px-10 pb-20">
-      <div className="max-w-5xl mx-auto pt-8 px-4">
-        <a
-          href="/#projects"
-          className="inline-flex items-center gap-2 text-sm text-neutral-400 hover:text-white transition-all duration-300 group"
-        >
-          <span className="transform transition-transform duration-300 group-hover:-translate-x-1">
-            ←
-          </span>
+     <div className="max-w-5xl mx-auto pt-8 ">
+  <a
+    href="/#projects"
+    className="group inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-neutral-300 backdrop-blur-md transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white hover:shadow-[0_0_30px_rgba(255,255,255,0.06)]"
+  >
+    <span className="text-base transition-transform duration-300 group-hover:-translate-x-1">
+      ←
+    </span>
 
-          <span className="tracking-wide">
-            View Full Portfolio
-          </span>
-        </a>
-      </div>
+    <span className="tracking-wide">
+      View Full Portfolio
+    </span>
+  </a>
+</div>
 
       <div className="max-w-5xl mx-auto">
         {/* SECTION 1 — Hero */}
@@ -30,6 +30,7 @@ export default function Page() {
           <div className="flex gap-3 mt-8 flex-wrap">
             <a href="https://github.com/anoushka45/cortexkitchen" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-full border border-white/20 text-white text-sm hover:border-purple transition">GitHub</a>
             <a href="#" className="px-5 py-2.5 rounded-full bg-purple text-black font-semibold text-sm hover:bg-purple/80 transition">Demo Video</a>
+            <a href="/docs/CortexKitchen_Overview.pdf" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-full border border-white/20 text-white text-sm hover:border-purple transition">Overview</a>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-14">

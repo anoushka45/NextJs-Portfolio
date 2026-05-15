@@ -48,7 +48,7 @@ const Hero = () => {
             <a href="https://github.com/anoushka45" target="_blank" rel="noopener noreferrer">
               <MagicButton title="GitHub" icon={<FaLocationArrow />} position="right" otherClasses="!bg-black-200" />
             </a>
-            <a href="/docs/Anoushka_Vyas_Resume_Mar_2026.pdf" target="_blank" rel="noopener noreferrer">
+            <a href="/docs/Anoushka_Vyas_Resume.pdf" target="_blank" rel="noopener noreferrer">
               <MagicButton title="Resume" icon={<FaLocationArrow />} position="right" otherClasses="!bg-black-200" />
             </a>
           </div>

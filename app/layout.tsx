@@ -16,7 +16,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Anoushka Vyas — AI Engineer · LLM Systems · Multi-Agent Systems",
+  title: "Anoushka Vyas - Portfolio",
   description: "AI engineer at Mphasis building production multi-agent systems — LangGraph orchestration, hybrid RAG pipelines, and intelligent routing at scale.",
   icons: {
     icon: "/favicon.ico",

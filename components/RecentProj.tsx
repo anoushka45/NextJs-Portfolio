@@ -70,7 +70,7 @@ const RecentProj = () => {
 
               <div className="flex flex-wrap gap-3 mt-6">
                 <a href={featured.caseStudyLink} className="px-5 py-2.5 rounded-full bg-purple text-black-100 text-sm font-semibold hover:bg-purple/80 transition">
-                  View Case Study
+                  View Details
                 </a>
                 <a href={featured.link} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-full border border-white/20 text-white-200 text-sm hover:border-white/40 transition">
                   GitHub
