@@ -6,6 +6,7 @@ const Footer = () => {
   return (
     <footer className="w-full mb-[100px] md:mb-5 pb-10" id="contact">
       <div className="flex flex-col items-center">
+        <p className="eyebrow">Contact</p>
         <h1 className="heading lg:max-w-[45vw]">
           Interested in <span className="text-purple">AI systems</span>, backend engineering, or building intelligent products together?
         </h1>

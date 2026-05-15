@@ -72,17 +72,17 @@ export const BentoGridItem = ({
             <img
               src={img}
               alt={img}
-              className={cn(imgClassName, "object-cover object-center ")}
+              className={cn(imgClassName, "object-cover object-center opacity-50")}
             />
           )}
         </div>
-        <div className={`absolute right-0 -bottom-5 ${id == 5 && 'w-full opacity-80'}`}>
+        <div className={`absolute right-0 -bottom-5 ${id == 5 && 'w-full opacity-40'}`}>
           {
             spareImg && (
               <img
                 src={spareImg}
                 alt={spareImg}
-                className={`object-cover,object-center ,w-full h-full`}
+                className={`object-cover object-center w-full h-full opacity-50`}
 
               />
 
@@ -101,45 +101,70 @@ export const BentoGridItem = ({
             "group-hover/bento:translate-x-2 transition duration-200 relative md:h-full min-h-40 flex flex-col px-5 p-5 lg:p-10"
           )
         }>
-          <div className="font-sans font-extralight text-[#c1c2d3] text-sm md:text-xs lg:text-base z-10 ">
-            {description}
-          </div>
-          <div className={cn("font-sans font-bold text-lg lg:text-3xl max-w-96 z-10", titleClassName)}>
-            {title}
-          </div>
+          {id !== 5 && (
+            <div className="font-sans font-extralight text-[#c1c2d3] text-sm md:text-xs lg:text-base z-10">
+              {description}
+            </div>
+          )}
+          {id !== 5 && (
+            <div className={cn("font-sans font-bold text-lg lg:text-3xl max-w-96 z-10", titleClassName)}>
+              {title}
+            </div>
+          )}
 
           {id === 2 && (
             <div className="absolute inset-0 z-0">
               <GlobeDemo />
             </div>
-          )}          {id == 3 && (
-            <div className="flex lg:gap-5 w-fit
-          absolute -right-3 lg:-right-2 ">
+          )}          {id === 3 && (
+            <div className="flex flex-wrap gap-2 justify-center mt-4 z-10 relative">
+              {[
+                { name: "LangGraph", dot: "bg-purple" },
+                { name: "LangChain", dot: "bg-purple" },
+                { name: "RAG Pipelines", dot: "bg-purple" },
+                { name: "Python", dot: "bg-sky-400" },
+                { name: "FastAPI", dot: "bg-sky-400" },
+                { name: "Docker", dot: "bg-sky-400" },
+                { name: "Vector Databases", dot: "bg-purple" },
+                { name: "PostgreSQL", dot: "bg-sky-400" },
+                { name: "React / Next.js", dot: "bg-white/50" },
+              ].map((item) => (
+                <span
+                  key={item.name}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#10132e] border border-white/[0.08] text-sm text-white/80 flex-shrink-0"
+                >
+                  <span className={`w-2 h-2 rounded-full flex-shrink-0 ${item.dot}`} />
+                  {item.name}
+                </span>
+              ))}
+            </div>
+          )}
 
-              <div className="flex flex-col gap-3 w-full">
-                {["Python", "FastAPI", "LangChain"].map((item) => (
-                  <span
-                    key={item}
-                    className="py-2 lg:py-4 lg:px-3 px-3 text-xs lg:text-base opacity-50 lg:opacity-100 rounded-lg text-center bg-[#10132e] flex-shrink-0"
-                  >
-                    {item}
-                  </span>
-                ))}
-                <span className="py-4 px-3 rounded-lg text-center bg-[#10132e]" />
+          {id === 5 && (
+            <div className="z-10 relative flex flex-col gap-6 h-full">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-purple/10 blur-3xl rounded-full pointer-events-none" />
+              <div className="absolute bottom-4 left-0 w-24 h-24 bg-sky-400/[0.06] blur-2xl rounded-full pointer-events-none" />
+
+              <div className="pl-5 border-l-[3px] border-purple/60">
+                <p className="text-xs uppercase tracking-[0.18em] text-purple/70 mb-4">Engineering mindset</p>
+                <p className="text-white text-lg md:text-xl font-bold leading-snug">
+                  I think carefully about where a model belongs in a system, and where it does not.
+                </p>
+                <p className="text-white/50 text-sm mt-4 leading-7">
+                  Most reliability problems in production AI are architectural. Getting that boundary right separates a working prototype from something you can actually depend on.
+                </p>
               </div>
-              <div className="flex flex-col gap-3 w-full">
-                <span className="py-4 px-3 rounded-lg text-center bg-[#10132e]" />
-                {['Tailwind.css', 'Azure', 'ExpressJS',].map((item) => (
-                  <span
-                    key={item}
-                    className="py-2 lg:py-4 lg:px-3 px-3 text-xs lg:text-base opacity-50 lg:opacity-100 rounded-lg text-center bg-[#10132e] flex-shrink-0"
-                  >
-                    {item}
-                  </span>
-                ))}
+
+              <div className="border-t border-white/[0.07] my-2" />
+
+              <div>
+                <p className="text-white font-bold text-xl md:text-2xl leading-snug">
+                  The never-ending possibilities.
+                </p>
+                <p className="text-white/50 text-sm mt-3 leading-7">
+                  Every problem in AI unlocks three more. The field moves fast enough that there&apos;s always something genuinely new to figure out — and just enough structure to build on.
+                </p>
               </div>
-
-
             </div>
           )}
 

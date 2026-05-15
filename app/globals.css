@@ -80,7 +80,11 @@
 
 @layer utilities {
   .heading {
-    @apply font-bold text-4xl md:text-5xl text-center;
+    @apply font-bold text-4xl md:text-5xl text-center tracking-tight;
+  }
+
+  .eyebrow {
+    @apply text-xs uppercase tracking-[0.2em] text-white/40 mb-3 text-center;
   }
 
   .black-gradient {

@@ -16,10 +16,21 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Anoushka's Portfolio",
-  description: "Next Js Portfolio",
+  title: "Anoushka Vyas - Portfolio",
+  description: "AI engineer at Mphasis building production multi-agent systems — LangGraph orchestration, hybrid RAG pipelines, and intelligent routing at scale.",
   icons: {
     icon: "/favicon.ico",
+  },
+  openGraph: {
+    title: "Anoushka Vyas — AI Engineer",
+    description: "AI engineer at Mphasis building production multi-agent systems — LangGraph orchestration, hybrid RAG pipelines, and intelligent routing at scale.",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Anoushka Vyas — AI Engineer",
+    description: "AI engineer at Mphasis building production multi-agent systems — LangGraph orchestration, hybrid RAG pipelines, and intelligent routing at scale.",
   },
 };
 

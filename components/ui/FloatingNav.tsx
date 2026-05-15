@@ -76,13 +76,14 @@ export const FloatingNav = ({
             key={`link=${idx}`}
             href={navItem.link}
             className={cn(
-              "relative dark:text-neutral-50 items-center  flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
+              "relative dark:text-white/70 items-center flex space-x-1 text-neutral-600 dark:hover:text-white hover:text-neutral-500 transition-colors duration-200 group"
             )}
           >
             <span className="block sm:hidden">{navItem.icon}</span>
-            {/* add !cursor-pointer */}
-            {/* remove hidden sm:block for the mobile responsive */}
-            <span className=" text-sm !cursor-pointer">{navItem.name}</span>
+            <span className="text-sm !cursor-pointer relative">
+              {navItem.name}
+              <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-purple group-hover:w-full transition-all duration-300" />
+            </span>
           </Link>
         ))}
         {/* remove this login btn */}
