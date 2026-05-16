@@ -7,7 +7,7 @@ export default function Page() {
     <main className="min-h-screen bg-black-100 text-white px-5 sm:px-10 pb-20">
      <div className="max-w-5xl mx-auto pt-8 ">
 <a
-  href="/#projects"
+  href="/"
   className="group relative inline-flex items-center overflow-hidden rounded-full border border-white/10 bg-white/[0.03] px-6 py-2 text-sm font-medium text-neutral-200 backdrop-blur-xl transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white hover:shadow-[0_0_40px_rgba(255,255,255,0.08)]"
 >
   {/* subtle glow */}
@@ -38,7 +38,7 @@ export default function Page() {
 
           <div className="flex gap-3 mt-8 flex-wrap">
             <a href="https://github.com/anoushka45/cortexkitchen" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-full border border-white/20 text-white text-sm hover:border-purple transition">GitHub</a>
-            <a href="#" className="px-5 py-2.5 rounded-full bg-purple text-black font-semibold text-sm hover:bg-purple/80 transition">Demo Video</a>
+            <a href="https://youtu.be/zOBg-fAOxac" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-full bg-purple text-black font-semibold text-sm hover:bg-purple/80 transition">Demo Video</a>
             <a href="/docs/CortexKitchen_Overview.pdf" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-full border border-white/20 text-white text-sm hover:border-purple transition">Overview</a>
           </div>
 
@@ -506,12 +506,15 @@ export default function Page() {
           <h2 className="text-3xl md:text-4xl font-bold text-white mt-3">See it in action.</h2>
 
           <div className="rounded-2xl bg-black-200 border border-white/10 overflow-hidden mt-8">
-            <div className="aspect-video w-full bg-black-100 flex flex-col items-center justify-center">
-              <div className="w-16 h-16 rounded-full bg-purple/20 border border-purple/40 flex items-center justify-center text-purple text-xl">▶</div>
-              <div className="text-white-200 text-sm mt-4">Demo video coming soon</div>
-              <div className="text-white-200/60 text-xs mt-1">Loom walkthrough · Friday Rush scenario end-to-end</div>
+            <div className="aspect-video w-full">
+              <iframe
+                className="w-full h-full"
+                src="https://www.youtube.com/embed/zOBg-fAOxac"
+                title="CortexKitchen Demo"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
             </div>
-            {/* Replace with Loom iframe once recorded */}
           </div>
         </section>
 
@@ -584,7 +587,7 @@ export default function Page() {
           <div className="flex justify-center gap-4 mt-8 flex-wrap">
             <a href="https://github.com/anoushka45/cortexkitchen" target="_blank" rel="noopener noreferrer" className="px-6 py-3 rounded-full bg-purple text-black font-semibold text-sm font-medium hover:bg-purple/80 transition">View on GitHub</a>
             <a href="mailto:vyasanoushka@gmail.com" className="px-6 py-3 rounded-full border border-white/20 text-white text-sm hover:border-purple transition">Get in Touch</a>
-            <a href="#" className="px-6 py-3 rounded-full border border-white/20 text-white text-sm hover:border-purple transition">Demo Video</a>
+            <a href="https://youtu.be/zOBg-fAOxac" target="_blank" rel="noopener noreferrer" className="px-6 py-3 rounded-full border border-white/20 text-white text-sm hover:border-purple transition">Demo Video</a>
           </div>
         </section>
       </div>

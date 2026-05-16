@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 
@@ -8,6 +8,14 @@ const World = dynamic(() => import("./Globe").then((m) => m.World), {
 });
 
 export function GlobeDemo() {
+  const [tabVisible, setTabVisible] = useState(true);
+
+  useEffect(() => {
+    const handleVisibility = () => setTabVisible(!document.hidden);
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, []);
+
   const globeConfig = {
     pointSize: 4,
     globeColor: "#062056",
@@ -31,7 +39,7 @@ export function GlobeDemo() {
     autoRotateSpeed: 0.5,
   };
   const colors = ["#06b6d4", "#3b82f6", "#6366f1"];
-  const sampleArcs = [
+  const sampleArcs = useMemo(() => [
     {
       order: 1,
       startLat: -19.885592,
@@ -392,7 +400,7 @@ export function GlobeDemo() {
       arcAlt: 0.3,
       color: colors[Math.floor(Math.random() * (colors.length - 1))],
     },
-  ];
+  ], []);
 
   return (
     <div className="flex absolute items-center justify-center
@@ -404,7 +412,7 @@ export function GlobeDemo() {
       
         <div className="absolute w-full bottom-0 inset-x-0 h-40 bg-gradient-to-b pointer-events-none select-none from-transparent dark:to-black to-white z-40" />
         <div className="absolute w-full h-72 md:h-full z-10">
-          <World data={sampleArcs} globeConfig={globeConfig} />
+          {tabVisible && <World data={sampleArcs} globeConfig={globeConfig} />}
         </div>
       </div>
     </div>

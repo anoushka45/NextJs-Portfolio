@@ -60,8 +60,8 @@ export const gridItems = [
   },
   {
     id: 4,
-    title: "I enjoy building systems where AI is practical, explainable, and useful.",
-    description: "Engineering mindset",
+    title: "Building AI systems designed for decisions, not just conversations.",
+    description: "What I care about",
     className: "lg:col-span-2 md:col-span-3 md:row-span-1",
     imgClassName: "",
     titleClassName: "justify-start",
@@ -94,7 +94,7 @@ export const projects: Project[] = [
   {
     id: 1,
     title: "CortexKitchen — AI Operations Decision Engine",
-    des: "A 9-node multi-agent decision system for restaurant operations. LangGraph orchestration, RAG-backed complaint intelligence, Prophet demand forecasting, a 5-dimension Critic validation layer, and a full persisted audit trail. Built end-to-end solo across 4 phases.",
+    des: "A 9-node multi-agent decision system for restaurant operations. LangGraph orchestration, RAG-backed complaint intelligence, Prophet demand forecasting, a 5-dimension Critic validation layer, and a full persisted audit trail. Built end-to-end solo across all phases.",
     img: "/projects/ck.png",
     link: "https://github.com/anoushka45/cortexkitchen",
     category: "AI",

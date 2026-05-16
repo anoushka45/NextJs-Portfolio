@@ -147,11 +147,11 @@ export const BentoGridItem = ({
 
     <div className="pl-5 border-l-[3px] border-purple/60">
       <p className="mb-3 text-[11px] uppercase tracking-[0.22em] text-purple/70">
-        How I Think
+        How I Work
       </p>
 
       <h3 className="text-[1.35rem] md:text-[1.55rem] font-semibold leading-[1.45] text-white">
-        I enjoy building systems that feel clean, useful, and reliable.
+        I like understanding how all the pieces connect — and where things quietly break.
       </h3>
 
       <p className="mt-4 text-md leading-7 text-white/50 max-w-lg">
