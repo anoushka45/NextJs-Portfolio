@@ -509,7 +509,7 @@ export default function Page() {
             <div className="aspect-video w-full">
               <iframe
                 className="w-full h-full"
-                src="https://www.youtube.com/watch?v=zbQr0HsbnW0"
+                src="https://www.youtube.com/embed/zbQr0HsbnW0"
                 title="CortexKitchen Demo"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
