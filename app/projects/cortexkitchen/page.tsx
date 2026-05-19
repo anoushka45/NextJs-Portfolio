@@ -38,7 +38,7 @@ export default function Page() {
 
           <div className="flex gap-3 mt-8 flex-wrap">
             <a href="https://github.com/anoushka45/cortexkitchen" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-full border border-white/20 text-white text-sm hover:border-purple transition">GitHub</a>
-            <a href="https://youtu.be/zOBg-fAOxac" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-full bg-purple text-black font-semibold text-sm hover:bg-purple/80 transition">Demo Video</a>
+            <a href="https://www.youtube.com/watch?v=zbQr0HsbnW0" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-full bg-purple text-black font-semibold text-sm hover:bg-purple/80 transition">Demo Video</a>
             <a href="/docs/CortexKitchen_Overview.pdf" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-full border border-white/20 text-white text-sm hover:border-purple transition">Overview</a>
           </div>
 
@@ -509,7 +509,7 @@ export default function Page() {
             <div className="aspect-video w-full">
               <iframe
                 className="w-full h-full"
-                src="https://www.youtube.com/embed/zOBg-fAOxac"
+                src="https://www.youtube.com/watch?v=zbQr0HsbnW0"
                 title="CortexKitchen Demo"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen

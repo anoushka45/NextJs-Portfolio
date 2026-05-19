@@ -76,7 +76,7 @@ const RecentProj = () => {
                   GitHub
                 </a>
                 <a
-                  href="https://www.youtube.com/watch?v=zOBg-fAOxac"
+                  href="https://www.youtube.com/watch?v=zbQr0HsbnW0"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-5 py-2.5 rounded-full border border-white/20 text-white-200 text-sm hover:border-white/40 transition"
