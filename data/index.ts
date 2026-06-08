@@ -1,4 +1,3 @@
-
 export interface ProjectStat {
   label: string;
   value: string;
@@ -93,18 +92,32 @@ export const gridItems = [
 export const projects: Project[] = [
   {
     id: 1,
-    title: "CortexKitchen — AI Operations Decision Engine",
-    des: "A 9-node multi-agent decision system for restaurant operations. LangGraph orchestration, RAG-backed complaint intelligence, Prophet demand forecasting, a 5-dimension Critic validation layer, and a full persisted audit trail. Built end-to-end solo across all phases.",
-    img: "/projects/ck.png",
+    title: "CortexKitchen — Multi-Agent Ops Intelligence",
+    des: "A 9-node LangGraph multi-agent platform for restaurant operations. Five specialist agents run in parallel — demand forecasting, bookings, complaint RAG, menu intelligence, inventory. Critic-verified output, SSE streaming, Redis caching, PDF/Excel exports, RAG chatbot, What-If simulator, LangSmith golden dataset CI gate, and MCP integration. Phase 5 complete. Built end-to-end solo.",
+    img: "/projects/cortexkitchen/dashboard_complete1.png",
     link: "https://github.com/anoushka45/cortexkitchen",
     category: "AI",
-    tags: ["LangGraph", "RAG", "FastAPI", "Qdrant", "PostgreSQL", "Multi-Agent", "Prophet", "Next.js"],
+    tags: [
+      "LangGraph",
+      "Multi-Agent",
+      "FastAPI",
+      "RAG",
+      "Qdrant",
+      "PostgreSQL",
+      "Redis",
+      "SSE Streaming",
+      "LangSmith",
+      "RAGAS",
+      "MCP",
+      "Prophet",
+      "Next.js",
+    ],
     isFeatured: true,
     stats: [
-      { label: "Intelligence Nodes", value: "9" },
-      { label: "Planning Scenarios", value: "4" },
-      { label: "Critic Dimensions", value: "5" },
-      { label: "Vector Collections", value: "2" },
+      { label: "LangGraph Nodes", value: "9" },
+      { label: "Runs (7 days)", value: "59" },
+      { label: "Critic Pass Rate", value: "81%" },
+      { label: "Avg Critic Score", value: "0.81" },
     ],
     caseStudyLink: "/projects/cortexkitchen",
     demoVideoLink: undefined,
@@ -185,4 +198,3 @@ export const socialMedia = [
     link: "https://www.linkedin.com/in/anoushka-vyas-a57aa7157/", // Replace with your actual link
   },
 ];
-
