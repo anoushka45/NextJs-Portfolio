@@ -94,7 +94,7 @@ export const projects: Project[] = [
     id: 1,
     title: "CortexKitchen — Multi-Agent Ops Intelligence",
     des: "A 9-node LangGraph multi-agent platform for restaurant ops. Five parallel specialist agents (demand, bookings, complaints RAG, menu, inventory) with critic-gated output, SSE streaming, Redis caching, PDF/Excel exports, RAG chatbot, What-If simulator, LangSmith CI gate, and MCP integration. P6-00 shipped: per-node model tier routing via CometAPI (deepseek / gemini / claude per node). Built end-to-end solo.",
-    img: "/projects/cortexkitchen/dashboard_complete1.png",
+    img: "/projects/cortexkitchen_screenshots/01_homepage/hero.png",
     link: "https://github.com/anoushka45/cortexkitchen",
     category: "AI",
     tags: [
@@ -126,7 +126,7 @@ export const projects: Project[] = [
   },
   {
     id: 2,
-    title: "DocQuery — Enterprise Knowledge Assistant",
+    title: "DocQuery — Knowledge Assistant",
     des: "A multi-document RAG QA pipeline with semantic chunking, ChromaDB vector search, and grounded, source-attributed answers across heterogeneous document types.",
     img: "/projects/docQuery.png",
     link: "https://github.com/anoushka45/PDF_RAG_Assistant",

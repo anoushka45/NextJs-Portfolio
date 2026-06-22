@@ -364,9 +364,7 @@ export default function Page() {
             </Card>
           </div>
 
-          <div onClick={() => setLightbox({ src: S.pipelineRunning, caption: "Live pipeline mid-run — Ops Manager complete, four parallel specialists running simultaneously" })} className="cursor-zoom-in mt-8">
-            <Shot src={S.pipelineRunning} caption="Live pipeline mid-run — parallel specialists running simultaneously" />
-          </div>
+          
 
           <div className="mt-8 rounded-2xl border border-white/10 bg-black-200 px-8 py-6">
             <p className="text-[11px] uppercase tracking-[0.3em] text-white/30 font-mono mb-5 text-center">Integrations</p>
