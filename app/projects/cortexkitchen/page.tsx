@@ -12,21 +12,29 @@ const Lightbox = dynamic(() => import("../../../components/Lightbox"), { ssr: fa
    See the "Screenshots" section at the bottom of this file
    ───────────────────────────────────────────────────────────── */
 const S = {
-  hero: "/projects/cortexkitchen/dashboard_complete1.png",
-  pipelineRunning: "/projects/cortexkitchen/dashboard_running.png",
-  servicePlanning: "/projects/cortexkitchen/service_planning.png",
-  menuDirection: "/projects/cortexkitchen/menu_direction.png",
-  operationalRisk: "/projects/cortexkitchen/operational_risk.png",
-  whatIf: "/projects/cortexkitchen/what_if_simulator.png",
-  chatbot: "/projects/cortexkitchen/chatbot.png",
-  runs: "/projects/cortexkitchen/runs_list.png",
-  observability: "/projects/cortexkitchen/observability.png",
-  langsmith: "/projects/cortexkitchen/langsmith_runs.png",
-  langsmithGolden: "/projects/cortexkitchen/langsmith_golden_dataset.png",
-  sentry: "/projects/cortexkitchen/sentry_output.png",
-  pdfExport: "/projects/cortexkitchen/pdf_export.png",
-  excelChef: "/projects/cortexkitchen/export_excel1.png",
-  excelOwner: "/projects/cortexkitchen/export_excel2.png",
+  hero:             "/projects/cortexkitchen_screenshots/03_dashboard/03_plan_approved_top.png",
+  pipelineRunning:  "/projects/cortexkitchen_screenshots/03_dashboard/02_loading_screen.png",
+  servicePlanning:  "/projects/cortexkitchen_screenshots/03_dashboard/05_service_planning.png",
+  menuDirection:    "/projects/cortexkitchen_screenshots/03_dashboard/06_menu_direction.png",
+  operationalRisk:  "/projects/cortexkitchen_screenshots/03_dashboard/07_operational_risk.png",
+  whatIf:           "/projects/cortexkitchen_screenshots/03_dashboard/08_what_if_simulator.png",
+  chatbot:          "/projects/cortexkitchen_screenshots/05_chat/02_conversation_complaints.png",
+  runs:             "/projects/cortexkitchen_screenshots/04_runs/runs_history_audit.png",
+  runsDetail:       "/projects/cortexkitchen_screenshots/04_runs/run_detail_history_panel.png",
+  observability:    "/projects/cortexkitchen_screenshots/06_data_health/observability_panel.png",
+  dataHealth:       "/projects/cortexkitchen_screenshots/06_data_health/data_health.png",
+  langsmith:        "/projects/cortexkitchen_screenshots/09_observability_tools/langsmith_run_traces.png",
+  langsmithGolden:  "/projects/cortexkitchen_screenshots/09_observability_tools/langsmith_golden_dataset.png",
+  sentry:           "/projects/cortexkitchen_screenshots/09_observability_tools/sentry_error_capture.png",
+  pdfExport:        "/projects/cortexkitchen_screenshots/08_exports/pdf_chef_brief.png",
+  excelChef:        "/projects/cortexkitchen_screenshots/08_exports/excel_inventory_chef_view.png",
+  excelOwner:       "/projects/cortexkitchen_screenshots/08_exports/excel_cost_breakdown_owner_view.png",
+  settings:         "/projects/cortexkitchen_screenshots/07_config/settings.png",
+  profiles:         "/projects/cortexkitchen_screenshots/07_config/restaurant_profiles.png",
+  // NEW — CometAPI
+  cometapi:         "/projects/cortexkitchen_screenshots/07_config/cometapi.png",
+  cometapiDash:     "/projects/cortexkitchen_screenshots/07_config/cometapi-dashboard.png",
+  cometapiRun:      "/projects/cortexkitchen_screenshots/07_config/cometapi-run.png",
 };
 
 function Label({ children }: { children: React.ReactNode }) {
@@ -119,12 +127,9 @@ export default function Page() {
             ════════════════════════════════════════ */}
         <section className="py-20">
           <div className="flex items-center gap-3 mb-4">
-            <span className="px-3 py-1 rounded-full text-xs font-mono bg-orange-400/10 border border-orange-400/25 text-orange-300 tracking-wider">
-              PHASE 5 COMPLETE
-            </span>
-            <span className="px-3 py-1 rounded-full text-xs font-mono bg-green-400/10 border border-green-400/25 text-green-300 tracking-wider">
-              PRODUCTION
-            </span>
+            <span className="px-3 py-1 rounded-full text-xs font-mono bg-orange-400/10 border border-orange-400/25 text-orange-300 tracking-wider">PHASE 6 IN PROGRESS</span>
+            <span className="px-3 py-1 rounded-full text-xs font-mono bg-blue-400/10 border border-blue-400/25 text-blue-300 tracking-wider">P6-00 SHIPPED</span>
+            <span className="px-3 py-1 rounded-full text-xs font-mono bg-green-400/10 border border-green-400/25 text-green-300 tracking-wider">PRODUCTION</span>
           </div>
 
           <h1 className="text-5xl md:text-7xl font-bold text-white mt-2 leading-none">
@@ -354,9 +359,99 @@ export default function Page() {
               <p className="text-sm text-white-200 leading-6">
                 Agents receive an injected{" "}
                 <code className="text-orange-300 font-mono text-xs">BaseLLMProvider</code>{" "}
-                — no direct imports. Groq is primary; Gemini is the automatic fallback. Swap with one env var change.
+                — no direct imports. Groq is primary; Gemini auto-fallback. With <code className="text-orange-300 font-mono text-xs">COMET_TIERED=true</code>, each node gets a tier-appropriate model: fast for structured tasks, balanced for RAG synthesis, strong for the Critic.
               </p>
             </Card>
+          </div>
+
+          <div onClick={() => setLightbox({ src: S.pipelineRunning, caption: "Live pipeline mid-run — Ops Manager complete, four parallel specialists running simultaneously" })} className="cursor-zoom-in mt-8">
+            <Shot src={S.pipelineRunning} caption="Live pipeline mid-run — parallel specialists running simultaneously" />
+          </div>
+
+          <div className="mt-8 rounded-2xl border border-white/10 bg-black-200 px-8 py-6">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-white/30 font-mono mb-5 text-center">Integrations</p>
+            <div className="flex flex-wrap items-center justify-center gap-6">
+              {[
+                { src: "/projects/cortexkitchen_screenshots/logos/langgraph.png",  alt: "LangGraph"     },
+                { src: "/projects/cortexkitchen_screenshots/logos/langsmith.png",  alt: "LangSmith"     },
+                { src: "/projects/cortexkitchen_screenshots/logos/groq.png",       alt: "Groq"          },
+                { src: "/projects/cortexkitchen_screenshots/logos/gemini.png",     alt: "Gemini"        },
+                { src: "/projects/cortexkitchen_screenshots/logos/deepseek.png",   alt: "DeepSeek"      },
+                { src: "/projects/cortexkitchen_screenshots/logos/claude.png",     alt: "Claude"        },
+                { src: "/projects/cortexkitchen_screenshots/logos/redis.png",      alt: "Redis"         },
+                { src: "/projects/cortexkitchen_screenshots/logos/sentry.png",     alt: "Sentry"        },
+                { src: "/projects/cortexkitchen_screenshots/logos/otel.png",       alt: "OpenTelemetry" },
+                { src: "/projects/cortexkitchen_screenshots/logos/ragas.png",      alt: "RAGAS"         },
+                { src: "/projects/cortexkitchen_screenshots/logos/mcp.png",        alt: "MCP"           },
+                { src: "/projects/cortexkitchen_screenshots/logos/github.png",     alt: "GitHub"        },
+              ].map(({ src, alt }) => (
+                <div key={alt} className="flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity duration-200">
+                  <Image src={src} alt={alt} width={32} height={32} className="object-contain" />
+                  <span className="text-[9px] font-mono text-white/40 uppercase tracking-wider">{alt}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════
+            PER-NODE MODEL TIER ROUTING
+            ════════════════════════════════════════ */}
+        <section className="py-20 border-t border-white/10">
+          <Label>Per-Node Intelligence</Label>
+          <SectionTitle>The right model for each node. Not one model for everything.</SectionTitle>
+          <p className="text-white-200 mt-4 max-w-3xl leading-7">
+            When <code className="text-orange-300 font-mono text-sm">COMET_TIERED=true</code>, each LangGraph node is routed to a model tier matched to its task complexity. Powered by <span className="text-white font-semibold">CometAPI</span> — a unified proxy exposing 500+ models through a single OpenAI-compatible key.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
+            <div className="rounded-2xl bg-black-200 border border-blue-400/20 p-6 hover:border-blue-400/40 transition">
+              <span className="px-2.5 py-1 rounded-md text-xs font-mono bg-blue-400/10 border border-blue-400/20 text-blue-300">fast tier</span>
+              <p className="text-white font-mono text-sm mt-3">deepseek-v4-flash</p>
+              <p className="text-xs text-white/40 mt-1 mb-3">Demand Forecast · Inventory · Reservation</p>
+              <p className="text-sm text-white-200 leading-6">Structured computation and deterministic analysis. Fast model suffices — and saves cost on the highest-volume nodes.</p>
+            </div>
+            <div className="rounded-2xl bg-black-200 border border-purple/20 p-6 hover:border-purple/40 transition">
+              <span className="px-2.5 py-1 rounded-md text-xs font-mono bg-purple/10 border border-purple/20 text-purple">balanced tier</span>
+              <p className="text-white font-mono text-sm mt-3">gemini-3.5-flash</p>
+              <p className="text-xs text-white/40 mt-1 mb-3">Complaint Intelligence · Menu Intelligence</p>
+              <p className="text-sm text-white-200 leading-6">RAG synthesis over retrieved complaints and promotion signals — tasks that benefit from a stronger reasoning model.</p>
+            </div>
+            <div className="rounded-2xl bg-black-200 border border-orange-400/30 p-6 hover:border-orange-400/50 transition">
+              <span className="px-2.5 py-1 rounded-md text-xs font-mono bg-orange-400/10 border border-orange-400/25 text-orange-300">strong tier</span>
+              <p className="text-white font-mono text-sm mt-3">claude-sonnet-4-6</p>
+              <p className="text-xs text-white/40 mt-1 mb-3">Critic · Quality Gate</p>
+              <p className="text-sm text-white-200 leading-6">The highest-stakes node. Scores across five dimensions, issues the final verdict. Always gets the best model available.</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+            <Card>
+              <h3 className="font-semibold text-white mb-2">CometAPI — unified model proxy</h3>
+              <p className="text-sm text-white-200 leading-6">Single OpenAI-compatible endpoint, one API key, 500+ models. Each tier has a fallback chain — if the primary model fails, the node degrades to the next tier rather than erroring.</p>
+            </Card>
+            <Card>
+              <h3 className="font-semibold text-white mb-2">Per-node cost visibility in LangSmith</h3>
+              <p className="text-sm text-white-200 leading-6">LangSmith traces show exactly which model hit which node. Per-model cost visible in every run's <code className="text-orange-300 font-mono text-xs">llm_usage</code> breakdown — fast vs strong tier cost difference visible per run.</p>
+            </Card>
+          </div>
+
+          <Card className="mt-4">
+            <p className="text-sm text-white-200 leading-6">
+              <span className="text-white font-semibold">Fully opt-in.</span> Set <code className="text-orange-300 font-mono text-xs">LLM_PROVIDER=comet</code> and <code className="text-orange-300 font-mono text-xs">COMET_TIERED=true</code>. Groq default and Gemini fallback unchanged otherwise. The async fix that came with this branch also cut fan-out latency from 48.7s to 17s.
+            </p>
+          </Card>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+            <div onClick={() => setLightbox({ src: S.cometapi, caption: "CometAPI — unified model proxy" })} className="cursor-zoom-in">
+              <Shot src={S.cometapi} caption="CometAPI — unified model proxy" />
+            </div>
+            <div onClick={() => setLightbox({ src: S.cometapiDash, caption: "CometAPI — usage and model breakdown" })} className="cursor-zoom-in">
+              <Shot src={S.cometapiDash} caption="CometAPI — usage and model breakdown" />
+            </div>
+            <div onClick={() => setLightbox({ src: S.cometapiRun, caption: "CometAPI — per-node model routing in a live run" })} className="cursor-zoom-in">
+              <Shot src={S.cometapiRun} caption="CometAPI — per-node model routing in a live run" />
+            </div>
           </div>
         </section>
 
@@ -805,58 +900,122 @@ export default function Page() {
               <p className="text-sm text-white-200 leading-6">No agent imports a provider directly — they receive an injected <code className="text-orange-300 font-mono text-xs">BaseLLMProvider</code>. If Groq hits a rate limit, <code className="text-orange-300 font-mono text-xs">FallbackLLMProvider</code> retries transparently on Gemini. Adding OpenAI or Claude means implementing one interface.</p>
             </Card>
             <Card>
-              <h3 className="font-semibold text-white mb-2">All data is synthetic</h3>
-              <p className="text-sm text-white-200 leading-6">All operational data is seeded synthetically — Friday demand spikes, 7–9 PM reservation clusters, pizza-heavy complaint themes, and deliberate shortage scenarios. Live POS and reservation connectors are scoped to Phase 6.</p>
+              <h3 className="font-semibold text-white mb-2">Seeded for every edge case</h3>
+              <p className="text-sm text-white-200 leading-6">The schema is production-ready; the data is engineered. Friday demand spikes, 7–9 PM reservation pressure, complaint clusters by dish type, deliberate low-stock edge cases — seeded to stress-test every node under realistic conditions. Phase 6-01 connects live POS and reservation feeds.</p>
+            </Card>
+            <Card>
+              <h3 className="font-semibold text-white mb-2">Per-node model complexity matching</h3>
+              <p className="text-sm text-white-200 leading-6">
+                Numeric nodes like Demand Forecast and Inventory use the fast-tier model — deterministic computation doesn't need strong reasoning. Complaint and Menu Intelligence use balanced for RAG synthesis. The Critic always gets the strongest model. Cost stays low; quality isn't sacrificed where it matters.
+              </p>
             </Card>
           </div>
         </section>
 
         {/* ════════════════════════════════════════
-            PHASE HISTORY
+            BUILD JOURNEY
             ════════════════════════════════════════ */}
         <section className="py-20 border-t border-white/10">
-          <Label>Build History</Label>
-          <SectionTitle>Five phases. All shipped.</SectionTitle>
+          <Label>Build Journey</Label>
+          <SectionTitle>Built solo. Mar – Jun 2026.</SectionTitle>
+
           <p className="text-white-200 mt-4 max-w-3xl leading-7">
-            CortexKitchen was built solo across five phases over multiple months — from initial system design to a full production-grade platform.
+            CortexKitchen started as a system design exercise — what would a real production AI platform look like built properly from scratch? No tutorials, no templates. Phase 0 was just documents: architecture, data model, API contracts, evaluation rubric. Every phase after that added one real layer of complexity, and every decision had a reason.
           </p>
 
-          <div className="space-y-4 mt-10">
-            {[
-              {
-                phase: "Phase 0", label: "Design",
-                items: ["Architecture, PRD, system design, data model, API contracts, evaluation rubric"],
-              },
-              {
-                phase: "Phase 1", label: "Core System",
-                items: ["Docker Compose stack · FastAPI app · SQLAlchemy + Alembic · LangGraph 9-node graph · CriticService · Next.js dashboard"],
-              },
-              {
-                phase: "Phase 2", label: "Intelligence",
-                items: ["Prophet demand forecasting · Inventory shortage/overstock alerts · Menu intelligence with promotion strategy"],
-              },
-              {
-                phase: "Phase 3", label: "Multi-Scenario",
-                items: ["Four scenario presets · Persisted planning runs with audit inspection · Cost-aware CriticService"],
-              },
-              {
-                phase: "Phase 4", label: "Productisation",
-                items: ["Multi-tenant auth (JWT HS256) · LangSmith tracing · Structured logging · LLM cost tracking · Configurable restaurant profiles · LLM provider abstraction (BaseLLMProvider / FallbackLLMProvider) · RAGAS + DeepEval evals · MCP server (Anthropic SDK)"],
-              },
-              {
-                phase: "Phase 5", label: "Export · UX · Observability",
-                items: ["PDF + Excel exports (ReportLab / openpyxl) · Redis plan caching · Planning SSE streaming · What-If simulator · OpenTelemetry + Prometheus · Sentry error tracking · LangSmith golden dataset CI gate · Multi-tenant workspace isolation (Postgres + Qdrant) · RAG chatbot (AsyncGroq SSE)"],
-              },
-            ].map(({ phase, label, items }) => (
-              <div key={phase} className="rounded-2xl bg-black-200 border border-white/10 p-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="px-2.5 py-1 rounded-md text-xs font-mono bg-green-400/10 border border-green-400/20 text-green-300">✓ COMPLETE</span>
-                  <span className="font-mono text-xs text-orange-400">{phase}</span>
-                  <span className="text-white font-semibold">{label}</span>
+          <div className="mt-6 border-l-2 border-orange-400/30 pl-4 max-w-2xl">
+            <p className="text-sm text-white/50 italic leading-6">Build it the way a small team would. Spec first, infra second, intelligence third. Every commit has a reason. No scaffolding code, no tutorial architecture, no skipped steps.</p>
+          </div>
+
+          {/* Timeline */}
+          <div className="relative mt-12">
+            {/* spine */}
+            <div className="absolute left-[19px] top-3 bottom-3 w-px bg-gradient-to-b from-orange-400/50 via-white/[0.06] to-yellow-400/25" />
+
+            <div className="space-y-5">
+              {[
+                {
+                  phase: "Phase 0",
+                  label: "Design before code",
+                  date: "Mar 15, 2026",
+                  problem: "Most AI projects start with a model call and figure out structure later. I wanted to do it backwards — write the architecture doc, data model, and API contracts first, then build to spec.",
+                  shipped: "PRD, system architecture, LangGraph topology diagram, PostgreSQL schema, API contracts, evaluation rubric. All five docs merged to dev in a single day.",
+                },
+                {
+                  phase: "Phase 1",
+                  label: "Get the skeleton running end-to-end",
+                  date: "Mar 16 – Apr 13, 2026",
+                  problem: "The hardest part of a multi-agent system is getting state to flow correctly through all nodes without breaking. I needed a working 9-node graph with real services behind each node — not stubs.",
+                  shipped: "Docker Compose stack, FastAPI app, SQLAlchemy + Alembic, LangGraph 9-node graph with parallel fan-out, all five domain services, CriticService, Qdrant seeding, Next.js dashboard — 12 branches merged.",
+                },
+                {
+                  phase: "Phase 2",
+                  label: "Make the intelligence actually intelligent",
+                  date: "Apr 16 – Apr 26, 2026",
+                  problem: "The first pass used placeholder logic. Phase 2 made the domain nodes genuinely useful — Prophet for demand forecasting, real inventory shortage detection, menu strategy aligned to stock signals.",
+                  shipped: "Prophet time-series forecasting with peak detection and confidence bands, feasibility-aware inventory shortage/overstock alerts, menu push/ease-back/avoid strategy, evaluation refinement with automated sanity checks.",
+                },
+                {
+                  phase: "Phase 3",
+                  label: "Multiple scenarios, auditable decisions",
+                  date: "Apr 27 – Apr 29, 2026",
+                  problem: "A single hardcoded scenario isn't useful. And if the system can't show you why it made a decision, it's not trustworthy.",
+                  shipped: "Four scenario presets (friday_rush, weekday_lunch, holiday_spike, low_stock_weekend), persisted planning runs with full JSONB storage, cost-aware CriticService with 5-dimension scoring and revision feedback.",
+                },
+                {
+                  phase: "Phase 4",
+                  label: "Turn it into a real product",
+                  date: "May 31 – Jun 3, 2026",
+                  problem: "A system with no auth, no tracing, and no observability isn't a product — it's a script. Phase 4 added everything that makes it multi-tenant and production-observable.",
+                  shipped: "JWT multi-tenant auth, LangSmith per-node tracing, structlog JSON logging, LLM cost tracking, restaurant profiles, BaseLLMProvider abstraction with Groq/Gemini fallback, RAGAS + DeepEval evals, MCP server — 12 branches, all merged within 4 days.",
+                },
+                {
+                  phase: "Phase 5",
+                  label: "Polish everything the operator actually touches",
+                  date: "Jun 2026",
+                  problem: "The backend was solid. The operator experience wasn't. Phase 5 closed that gap — exports they can hand to a chef, a live pipeline they can watch, a chatbot that knows their actual data.",
+                  shipped: "PDF chef brief + role-aware Excel export, Redis plan caching (1hr TTL), SSE streaming with live pipeline diagram, What-If simulator, OpenTelemetry + Prometheus, Sentry, LangSmith golden dataset CI gate, multi-tenant Qdrant isolation, RAG chatbot with AsyncGroq SSE.",
+                },
+                {
+                  phase: "Phase 6",
+                  label: "Per-node model routing — P6-00 shipped",
+                  date: "Jun 19, 2026",
+                  problem: "One model for every node is wasteful and wrong. The Critic needs the best reasoning available. Demand Forecast just needs something fast. And the async fix that came with this branch cut fan-out latency from 48.7s to 17s.",
+                  shipped: "CometAPI integration, three-tier routing (deepseek-v4-flash / gemini-3.5-flash / claude-sonnet-4-6), per-model cost attribution, LangSmith per-node model visibility. P6-01 next: real data connectors.",
+                  inProgress: true,
+                },
+              ].map(({ phase, label, date, problem, shipped, inProgress }) => (
+                <div key={phase} className="relative flex gap-5">
+                  {/* timeline node */}
+                  <div className="relative flex-shrink-0 flex items-start" style={{ width: 40 }}>
+                    <div className={`w-[14px] h-[14px] rounded-full border-2 mt-2 z-10 ${
+                      inProgress
+                        ? "border-yellow-400 bg-yellow-400/20 shadow-[0_0_10px_rgba(250,204,21,0.35)]"
+                        : "border-orange-400 bg-orange-400/10 shadow-[0_0_8px_rgba(251,146,60,0.25)]"
+                    }`} />
+                  </div>
+
+                  {/* card */}
+                  <div className="flex-1 rounded-2xl bg-black-200 border border-white/10 p-5 hover:border-white/20 transition mb-1">
+                    <div className="flex flex-wrap items-center gap-3 mb-3">
+                      {inProgress ? (
+                        <span className="px-2 py-0.5 rounded text-xs font-mono bg-yellow-400/10 border border-yellow-400/20 text-yellow-300">⟳ IN PROGRESS</span>
+                      ) : (
+                        <span className="px-2 py-0.5 rounded text-xs font-mono bg-green-400/10 border border-green-400/20 text-green-300">✓ SHIPPED</span>
+                      )}
+                      <span className="font-mono text-xs text-orange-400 font-semibold">{phase}</span>
+                      <span className="text-white font-semibold">{label}</span>
+                      <span className="ml-auto text-xs font-mono text-white/30 hidden sm:block">{date}</span>
+                    </div>
+                    <p className="text-sm text-white/50 italic leading-6 mb-3">{problem}</p>
+                    <p className="text-sm text-white-200 leading-6">
+                      <span className="text-white/40 font-mono text-xs uppercase tracking-wider mr-2">Shipped</span>
+                      {shipped}
+                    </p>
+                  </div>
                 </div>
-                <p className="text-sm text-white-200 leading-6">{items[0]}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
 

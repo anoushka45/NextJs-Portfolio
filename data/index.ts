@@ -93,7 +93,7 @@ export const projects: Project[] = [
   {
     id: 1,
     title: "CortexKitchen — Multi-Agent Ops Intelligence",
-    des: "A 9-node LangGraph multi-agent platform for restaurant operations. Five specialist agents run in parallel — demand forecasting, bookings, complaint RAG, menu intelligence, inventory. Critic-verified output, SSE streaming, Redis caching, PDF/Excel exports, RAG chatbot, What-If simulator, LangSmith golden dataset CI gate, and MCP integration. Phase 5 complete. Built end-to-end solo.",
+    des: "A 9-node LangGraph multi-agent platform for restaurant ops. Five parallel specialist agents (demand, bookings, complaints RAG, menu, inventory) with critic-gated output, SSE streaming, Redis caching, PDF/Excel exports, RAG chatbot, What-If simulator, LangSmith CI gate, and MCP integration. P6-00 shipped: per-node model tier routing via CometAPI (deepseek / gemini / claude per node). Built end-to-end solo.",
     img: "/projects/cortexkitchen/dashboard_complete1.png",
     link: "https://github.com/anoushka45/cortexkitchen",
     category: "AI",
@@ -111,6 +111,8 @@ export const projects: Project[] = [
       "MCP",
       "Prophet",
       "Next.js",
+      "CometAPI",
+      "DeepSeek",
     ],
     isFeatured: true,
     stats: [
