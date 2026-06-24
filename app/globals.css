@@ -90,4 +90,28 @@
   .black-gradient {
     background: linear-gradient(90deg, #161a31 0%, #06091f 100%);
   }
+
+  .float-logo {
+    animation: floatLogo 4s ease-in-out infinite;
+  }
+
+  @keyframes floatLogo {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33%       { transform: translateY(-10px) rotate(1deg); }
+    66%       { transform: translateY(-5px) rotate(-1deg); }
+  }
+
+  .ring-pulse-1 { animation: ringPulse 3s ease-out infinite; }
+  .ring-pulse-2 { animation: ringPulse 3s ease-out infinite 1s; }
+  .ring-pulse-3 { animation: ringPulse 3s ease-out infinite 2s; }
+
+  @keyframes ringPulse {
+    0%   { opacity: 0.5; transform: scale(1);    }
+    100% { opacity: 0;   transform: scale(1.35); }
+  }
+
+  .hero-dot-grid {
+    background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
 }
