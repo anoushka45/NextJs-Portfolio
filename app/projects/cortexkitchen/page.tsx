@@ -1,914 +1,1058 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { useState } from "react";
-
 const Lightbox = dynamic(() => import("../../../components/Lightbox"), { ssr: false });
+const PhaseChart = dynamic(() => import("./PhaseChart"), { ssr: false });
 
-/* ─────────────────────────────────────────────────────────────
-   Screenshot paths — place these in /public/projects/cortexkitchen/
-   See the "Screenshots" section at the bottom of this file
-   ───────────────────────────────────────────────────────────── */
-const S = {
-  hero: "/projects/cortexkitchen/dashboard_complete1.png",
-  pipelineRunning: "/projects/cortexkitchen/dashboard_running.png",
-  servicePlanning: "/projects/cortexkitchen/service_planning.png",
-  menuDirection: "/projects/cortexkitchen/menu_direction.png",
-  operationalRisk: "/projects/cortexkitchen/operational_risk.png",
-  whatIf: "/projects/cortexkitchen/what_if_simulator.png",
-  chatbot: "/projects/cortexkitchen/chatbot.png",
-  runs: "/projects/cortexkitchen/runs_list.png",
-  observability: "/projects/cortexkitchen/observability.png",
-  langsmith: "/projects/cortexkitchen/langsmith_runs.png",
-  langsmithGolden: "/projects/cortexkitchen/langsmith_golden_dataset.png",
-  sentry: "/projects/cortexkitchen/sentry_output.png",
-  pdfExport: "/projects/cortexkitchen/pdf_export.png",
-  excelChef: "/projects/cortexkitchen/export_excel1.png",
-  excelOwner: "/projects/cortexkitchen/export_excel2.png",
-};
+/* ─── asset map ───────────────────────────────────────────── */
+const SC = "/projects/cortexkitchen_screenshots";
+const LOGO = `${SC}/logos`;
 
-function Label({ children }: { children: React.ReactNode }) {
+/* ─── reusable primitives ─────────────────────────────────── */
+function Tag({ children, color = "orange" }: { children: React.ReactNode; color?: string }) {
+  const map: Record<string, string> = {
+    orange: "bg-orange-500/10 border-orange-500/30 text-orange-300",
+    blue:   "bg-blue-500/10   border-blue-500/30   text-blue-300",
+    green:  "bg-green-500/10  border-green-500/30  text-green-300",
+    purple: "bg-purple-500/10 border-purple-500/30 text-purple-300",
+    yellow: "bg-yellow-500/10 border-yellow-500/30 text-yellow-300",
+    cyan:   "bg-cyan-500/10   border-cyan-500/30   text-cyan-300",
+    pink:   "bg-pink-500/10   border-pink-500/30   text-pink-300",
+  };
   return (
-    <p className="text-xs uppercase tracking-widest text-orange-400/80 font-mono">
-      {children}
-    </p>
-  );
-}
-
-function SectionTitle({ children }: { children: React.ReactNode }) {
-  return (
-    <h2 className="text-3xl md:text-4xl font-bold text-white mt-3 leading-tight">
-      {children}
-    </h2>
-  );
-}
-
-function Shot({
-  src,
-  caption,
-  className = "",
-}: {
-  src: string;
-  caption: string;
-  className?: string;
-}) {
-  return (
-    <div
-      className={`relative rounded-2xl overflow-hidden border border-white/10 bg-black-200 ${className}`}
-    >
-      <Image src={src} alt={caption} className="w-full h-auto block" width={1400} height={900} sizes="(max-width: 1024px) 100vw, 1200px"/>
-      <div className="absolute bottom-0 left-0 right-0 px-4 py-2 bg-black/70 backdrop-blur-sm">
-        <p className="text-[10px] font-mono tracking-wider text-white/60 uppercase">
-          {caption}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function Chip({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="px-2.5 py-1 rounded-md text-xs font-mono bg-black-200 border border-white/10 text-white-200">
+    <span className={`inline-block px-2.5 py-0.5 rounded-md text-xs font-mono border ${map[color] ?? map.orange}`}>
       {children}
     </span>
   );
 }
 
-function Card({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
+function SectionLabel({ children, color = "orange" }: { children: React.ReactNode; color?: string }) {
+  const map: Record<string, string> = {
+    orange: "text-orange-400", blue: "text-blue-400", green: "text-green-400",
+    purple: "text-purple-400", yellow: "text-yellow-400", cyan: "text-cyan-400",
+    pink: "text-pink-400",
+  };
   return (
-    <div
-      className={`rounded-2xl bg-black-200 border border-white/10 p-6 ${className}`}
-    >
+    <p className={`text-xs font-mono uppercase tracking-[0.3em] font-bold mb-3 ${map[color] ?? map.orange}`}>
+      {children}
+    </p>
+  );
+}
+
+function SectionHeading({ children }: { children: React.ReactNode }) {
+  return <h2 className="text-4xl md:text-5xl font-black text-white leading-tight mb-5">{children}</h2>;
+}
+
+function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div className={`rounded-2xl border border-white/10 bg-[#111] p-6 ${className}`}>
       {children}
     </div>
   );
 }
 
+function Shot({
+  src, caption, onClick, tall = false,
+}: { src: string; caption: string; onClick?: () => void; tall?: boolean }) {
+  return (
+    <div
+      onClick={onClick}
+      className={`group relative rounded-2xl overflow-hidden border border-white/10 bg-[#0d0d0d] hover:border-white/25 transition-all duration-300 ${onClick ? "cursor-zoom-in" : ""}`}
+    >
+      <Image
+        src={src} alt={caption}
+        className={`w-full object-cover ${tall ? "h-72" : "h-auto"}`}
+        width={1400} height={900} sizes="100vw"
+      />
+      <div className="absolute bottom-0 left-0 right-0 px-4 py-2.5 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <p className="text-[11px] font-mono tracking-wider text-white/80">{caption}</p>
+      </div>
+    </div>
+  );
+}
+
+/* ─── main page ───────────────────────────────────────────── */
 export default function Page() {
   const [lightbox, setLightbox] = useState<{ src: string; caption?: string } | null>(null);
+  const [activeNode, setActiveNode] = useState<number | null>(null);
+  const [activeSection, setActiveSection] = useState("hero");
+
+  const open = (src: string, caption?: string) => setLightbox({ src, caption });
+
+  const navItems = [
+    { id: "hero",          label: "Overview"     },
+    { id: "problem",       label: "The Problem"  },
+    { id: "pipeline",      label: "Pipeline"     },
+    { id: "scenarios",     label: "Scenarios"    },
+    { id: "capabilities",  label: "Capabilities" },
+    { id: "critic",        label: "Critic Gate"  },
+    { id: "observability", label: "Observability"},
+    { id: "stack",         label: "Stack"        },
+    { id: "journey",       label: "Journey"      },
+  ];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const ids = navItems.map(n => n.id);
+      for (const id of [...ids].reverse()) {
+        const el = document.getElementById(id);
+        if (el && window.scrollY >= el.offsetTop - 120) { setActiveSection(id); break; }
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+
+
+  const nodes = [
+    { n: 1, name: "Ops Manager",      tag: "Entry",        color: "orange", detail: "Validates the scenario against the registry. If invalid, short-circuits directly to Final Assembler. Sets metadata in OrchestratorState." },
+    { n: 2, name: "Demand Forecast",  tag: "Prophet",      color: "blue",   detail: "Prophet time-series model on historical orders. Produces yhat, upper/lower confidence bands, peak_ratio. Runs first -Inventory and Menu depend on it." },
+    { n: 3, name: "Bookings",         tag: "Parallel",     color: "cyan",   detail: "Reads reservation records. Calculates slot-level occupancy, identifies high-pressure windows. Deterministic SQL + LLM interpretation." },
+    { n: 4, name: "Guest Feedback",   tag: "RAG",          color: "pink",   detail: "Runs in parallel with nodes 3, 5, 6. Qdrant cosine similarity retrieval over org-scoped complaint vectors. Surfaces recurring patterns and matching SOPs. LLM synthesises into a risk summary with mitigations." },
+    { n: 5, name: "Menu Intelligence",tag: "Parallel",     color: "yellow", detail: "Item-level sales velocity, top/weak performers, scenario-aware push/ease-back/avoid promotion strategy aligned to demand + stock." },
+    { n: 6, name: "Inventory",        tag: "Parallel",     color: "teal",   detail: "Checks stock against reorder thresholds. A 40% demand spike elevates marginal stock to critical shortage. Spoilage flags, restock priorities." },
+    { n: 7, name: "Aggregator",       tag: "Merge",        color: "green",  detail: "No LLM call. Merges all four parallel domain outputs into a single recommendations object. Assembles the RAG context for the Critic." },
+    { n: 8, name: "Critic Gate",      tag: "Quality",      color: "red",    detail: "5-dimension scoring: safety, feasibility, evidence, actionability, clarity. Returns approved / revision / rejected + annotated reasoning." },
+    { n: 9, name: "Final Assembler",  tag: "Output",       color: "white",  detail: "Shapes the API response with full metadata, token cost, node-level latency, execution trace. Handles error paths cleanly." },
+  ];
+
+  const colorMap: Record<string, string> = {
+    orange: "border-orange-500/50 bg-orange-500/10 text-orange-400",
+    blue:   "border-blue-500/50   bg-blue-500/10   text-blue-400",
+    cyan:   "border-cyan-500/50   bg-cyan-500/10   text-cyan-400",
+    pink:   "border-pink-500/50   bg-pink-500/10   text-pink-400",
+    yellow: "border-yellow-500/50 bg-yellow-500/10 text-yellow-400",
+    teal:   "border-teal-500/50   bg-teal-500/10   text-teal-400",
+    green:  "border-green-500/50  bg-green-500/10  text-green-400",
+    red:    "border-red-500/50    bg-red-500/10    text-red-400",
+    white:  "border-white/30      bg-white/10      text-white",
+    purple: "border-purple-500/50 bg-purple-500/10 text-purple-400",
+  };
+
+  const glowMap: Record<string, string> = {
+    orange: "shadow-[0_0_24px_rgba(249,115,22,0.5)]",
+    blue:   "shadow-[0_0_24px_rgba(59,130,246,0.5)]",
+    cyan:   "shadow-[0_0_24px_rgba(6,182,212,0.5)]",
+    pink:   "shadow-[0_0_24px_rgba(236,72,153,0.5)]",
+    yellow: "shadow-[0_0_24px_rgba(234,179,8,0.5)]",
+    teal:   "shadow-[0_0_24px_rgba(20,184,166,0.5)]",
+    green:  "shadow-[0_0_24px_rgba(34,197,94,0.5)]",
+    red:    "shadow-[0_0_24px_rgba(239,68,68,0.5)]",
+    white:  "shadow-[0_0_24px_rgba(255,255,255,0.3)]",
+    purple: "shadow-[0_0_24px_rgba(168,85,247,0.5)]",
+  };
+
+  const scenarios = [
+    { id: "friday_rush",       label: "Friday Rush",        color: "orange", desc: "High-volume Friday evening. Peak demand forecasted around 7-9 PM. All specialist agents stress-test against surge capacity." },
+    { id: "weekday_lunch",     label: "Weekday Lunch",      color: "blue",   desc: "Moderate weekday service. Focus on menu efficiency, quick turns, minimal staffing overhead." },
+    { id: "holiday_spike",     label: "Holiday Spike",      color: "purple", desc: "Atypical demand spike - Valentine's, NYE. Inventory risk elevated. Complaint history especially relevant." },
+    { id: "low_stock_weekend", label: "Low Stock Weekend",  color: "yellow", desc: "Critical inventory constraints. Menu strategy must avoid unavailable items. Plan approval threshold tightened." },
+  ];
+
+  const criticDimensions = [
+    { dim: "Safety",        score: 92, desc: "No allergen risk, no understaffed peaks, no capacity violations." },
+    { dim: "Feasibility",   score: 88, desc: "Stock and staffing can actually support what is recommended." },
+    { dim: "Evidence",      score: 95, desc: "Every claim is backed by retrieved complaints and SOPs." },
+    { dim: "Actionability", score: 90, desc: "Concrete steps a chef or manager can execute before the shift." },
+    { dim: "Clarity",       score: 85, desc: "Structured, unambiguous, easy to skim 5 minutes before service." },
+  ];
+
+  const logos = [
+    { src: `${LOGO}/langgraph.png`,   alt: "LangGraph"      },
+    { src: `${LOGO}/langsmith.png`,   alt: "LangSmith"      },
+    { src: `${LOGO}/groq.png`,        alt: "Groq"           },
+    { src: `${LOGO}/gemini.png`,      alt: "Gemini"         },
+    { src: `${LOGO}/deepseek.png`,    alt: "DeepSeek"       },
+    { src: `${LOGO}/claude.png`,      alt: "Claude"         },
+    { src: `${LOGO}/redis.png`,       alt: "Redis"          },
+    { src: `${LOGO}/sentry.png`,      alt: "Sentry"         },
+    { src: `${LOGO}/otel.png`,        alt: "OpenTelemetry"  },
+    { src: `${LOGO}/ragas.png`,       alt: "RAGAS"          },
+    { src: `${LOGO}/mcp.png`,         alt: "MCP"            },
+    { src: `${LOGO}/github.png`,      alt: "GitHub"         },
+  ];
+
   return (
-    <main className="min-h-screen bg-black-100 text-white px-5 sm:px-10 pb-24">
-      {/* ── back nav ── */}
-      <div className="max-w-5xl mx-auto pt-8">
-        <a
-          href="/"
-          className="group relative inline-flex items-center overflow-hidden rounded-full border border-white/10 bg-white/[0.03] px-6 py-2 text-sm font-medium text-neutral-200 backdrop-blur-xl transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
-        >
-          <div className="mr-3 h-2 w-2 rounded-full bg-orange-400 shadow-[0_0_14px_rgba(251,146,60,0.9)]" />
-          <span className="relative tracking-[0.18em] uppercase text-[11px]">
-            View Full Portfolio
-          </span>
-          <span className="relative ml-3 text-base opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100">
-            →
-          </span>
-        </a>
-      </div>
-
-      <div className="max-w-5xl mx-auto">
-
-        {/* ════════════════════════════════════════
-            HERO
-            ════════════════════════════════════════ */}
-        <section className="py-20">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="px-3 py-1 rounded-full text-xs font-mono bg-orange-400/10 border border-orange-400/25 text-orange-300 tracking-wider">
-              PHASE 5 COMPLETE
-            </span>
-            <span className="px-3 py-1 rounded-full text-xs font-mono bg-green-400/10 border border-green-400/25 text-green-300 tracking-wider">
-              PRODUCTION
-            </span>
-          </div>
-
-          <h1 className="text-5xl md:text-7xl font-bold text-white mt-2 leading-none">
-            Cortex<span className="text-orange-400">Kitchen</span>
-          </h1>
-
-          <p className="text-white-200 text-xl mt-5 max-w-2xl leading-8">
-            A <span className="text-white font-semibold">multi-agent AI platform</span> for restaurant operations. Five specialist agents run in parallel through a{" "}
-            <span className="text-white font-semibold">9-node LangGraph pipeline</span>, critic-verified across five quality dimensions, streamed live to the dashboard — and resolved into a single ops brief in under 90 seconds.
-          </p>
-
-          <p className="mt-4 text-lg text-orange-200/95 font-semibold">One verified, production-ready brief — under 90 seconds.</p>
-
-
-          <div className="flex gap-3 mt-8 flex-wrap">
-            <a
-              href="https://github.com/anoushka45/cortexkitchen"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-5 py-2.5 rounded-full bg-orange-400 text-black font-semibold text-sm hover:bg-orange-300 transition"
-            >
-              GitHub
-            </a>
-            <span className="px-5 py-2.5 rounded-full border border-white/20 text-white-200 text-sm cursor-default select-none">
-              Demo Video — Coming Soon
-            </span>
-            {/* <a
-              href="/docs/CortexKitchen_Overview.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-5 py-2.5 rounded-full border border-white/20 text-white text-sm hover:border-orange-400/50 transition"
-            >
-              Overview PDF
-            </a> */}
-          </div>
-
-          {/* live stats from observability panel */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-14">
-            {[
-              { v: "9", label: "LangGraph Nodes" },
-              { v: "59", label: "Runs (7 days)" },
-              { v: "81%", label: "Critic Pass Rate" },
-              { v: "0.81", label: "Avg Critic Score" },
-              { v: "16.6s", label: "Avg Latency" },
-              { v: "5", label: "Quality Dimensions" },
-              { v: "50", label: "Golden Eval Runs" },
-              { v: "5+", label: "Phases Shipped" },
-            ].map(({ v, label }) => (
-              <div
-                key={label}
-                className="rounded-2xl border border-white/10 bg-black-200 p-6 text-center"
+    <main className="min-h-screen bg-[#0a0a0a] text-white">
+      {/* ─── STICKY NAV ───────────────────────────────────────── */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 flex items-center justify-between h-14">
+          <a href="/" className="flex items-center gap-2 text-sm text-white/50 hover:text-white transition font-mono">
+            <span className="w-1.5 h-1.5 rounded-full bg-orange-400" /> ← Portfolio
+          </a>
+          <div className="hidden md:flex items-center gap-1">
+            {navItems.map(({ id, label }) => (
+              <button
+                key={id}
+                onClick={() => scrollTo(id)}
+                className={`px-3 py-1.5 rounded-md text-xs font-mono transition ${
+                  activeSection === id
+                    ? "bg-white/10 text-white"
+                    : "text-white/40 hover:text-white/70 hover:bg-white/5"
+                }`}
               >
-                <div className="text-3xl font-bold text-white font-mono">{v}</div>
-                <div className="text-sm text-white-200 mt-2">{label}</div>
-              </div>
+                {label}
+              </button>
             ))}
           </div>
-        </section>
-
-        {/* hero screenshot */}
-        <div onClick={() => setLightbox({ src: S.hero, caption: "Plan Approved — Critic 0.92 / 1.00 · Five agent metric cards" })} className="cursor-zoom-in">
-          <Shot src={S.hero} caption="Plan Approved — Critic 0.92 / 1.00 · Five agent metric cards" className="mb-2" />
+          <a
+            href="https://github.com/anoushka45/cortexkitchen"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-xs font-mono text-white/50 hover:text-white transition"
+          >
+            <Image src={`${LOGO}/github.png`} alt="GitHub" width={16} height={16} className="opacity-60" />
+            GitHub
+          </a>
         </div>
+      </nav>
 
-        {/* ════════════════════════════════════════
-            THE PROBLEM
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10">
-          <Label>The Problem</Label>
-          <SectionTitle>
-            Restaurant managers make dozens of high-stakes calls every shift with no system to help them.
-          </SectionTitle>
+      <div className="max-w-6xl mx-auto px-5 sm:px-10 pt-14">
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
-            <Card>
-              <h3 className="text-white font-semibold mb-2">No Early Warning</h3>
-              <p className="text-sm text-white-200 leading-6">
-                Staffing and prep decisions are reactive. By the time a demand spike is visible, it's too late to adjust.
-              </p>
-            </Card>
-            <Card>
-              <h3 className="text-white font-semibold mb-2">Fragmented Signals</h3>
-              <p className="text-sm text-white-200 leading-6">
-                Complaint data, reservation pressure, inventory levels, and menu performance sit in separate systems with no synthesis layer.
-              </p>
-            </Card>
-            <Card>
-              <h3 className="text-white font-semibold mb-2">No Audit Trail</h3>
-              <p className="text-sm text-white-200 leading-6">
-                When a shift goes badly, there's no record of what was recommended, what was decided, or why.
-              </p>
-            </Card>
+        {/* ═══════════════════════════════════════════════════════
+            HERO
+        ══════════════════════════════════════════════════════ */}
+        <section id="hero" className="pt-28 pb-20 relative">
+          {/* dot grid */}
+          <div className="absolute inset-0 -z-10 hero-dot-grid opacity-100" style={{ maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)" }} />
+          {/* colour blobs */}
+          <div className="absolute inset-0 -z-20 pointer-events-none">
+            <div className="absolute top-10 left-0 w-[500px] h-[500px] bg-orange-600/12 blur-[130px]" />
+            <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-600/8 blur-[120px]" />
           </div>
-        </section>
 
-        {/* ════════════════════════════════════════
-            ARCHITECTURE
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10">
-          <Label>Architecture</Label>
-          <SectionTitle>A stateful orchestration graph — not a chatbot.</SectionTitle>
-          <p className="text-white-200 mt-4 max-w-3xl leading-7">
-            CortexKitchen is built on LangGraph — a stateful DAG where each node receives a typed{" "}
-            <code className="text-orange-300 font-mono text-sm">OrchestratorState</code>, updates its output key, and passes state forward. Deterministic services handle structured computation: Prophet for forecasting, SQL aggregations for reservation pressure, rule-based logic for inventory alerts. LLMs are introduced only where they add value — synthesis, interpretation, and evaluation.
-          </p>
-
-          {/* architecture diagram */}
-          <div className="relative mt-16 rounded-[34px] border border-white/10 bg-[#050505] p-8 md:p-12 overflow-hidden">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[500px] w-[500px] bg-orange-400/8 blur-[140px]" />
-            <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:42px_42px]" />
-
-            <div className="relative z-10">
-              <div className="flex justify-center mb-14">
-                <div className="px-5 py-2 rounded-full border border-orange-400/25 bg-orange-400/10">
-                  <p className="text-[11px] tracking-[0.35em] uppercase text-orange-200 font-medium font-mono">
-                    LangGraph · 9-Node Stateful Topology
-                  </p>
-                </div>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-10">
+            {/* Left */}
+            <div className="flex-1 min-w-0">
+              {/* live dot + chips */}
+              <div className="flex flex-wrap items-center gap-2 mb-8">
+                <span className="flex items-center gap-1.5 text-xs font-mono text-green-400">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
+                  </span>
+                  Phase 6 Active
+                </span>
+                <span className="w-px h-3 bg-white/15" />
+                <Tag color="orange">P6-00 Shipped</Tag>
+                <Tag color="blue">Multi-Tenant</Tag>
+                <Tag color="purple">LangGraph</Tag>
               </div>
 
-              <div className="flex flex-col items-center">
-                {/* ops manager */}
-                <div className="relative rounded-3xl border border-orange-400/30 bg-[#0d0d0d]/90 px-6 py-4 min-w-[220px] text-center shadow-[0_0_60px_rgba(251,146,60,0.12)]">
-                  <div className="flex justify-center mb-3">
-                    <div className="w-3 h-3 rounded-full bg-orange-400 animate-pulse shadow-[0_0_20px_rgba(251,146,60,0.9)]" />
-                  </div>
-                  <p className="text-white text-sm font-semibold">Ops Manager</p>
-                  <p className="text-[11px] text-white/40 mt-1.5 tracking-wide">validates · fans out · syncs state</p>
-                </div>
+              <h1 className="text-6xl md:text-8xl font-black tracking-tight leading-none mb-6">
+                <span className="text-white">Cortex</span>
+                <span className="relative">
+                  <span className="absolute -inset-2 rounded-xl bg-orange-500/15 blur-xl" />
+                  <span className="relative text-orange-400">Kitchen</span>
+                </span>
+              </h1>
 
-                <div className="w-[2px] h-12 bg-gradient-to-b from-orange-400/70 to-blue-400/30" />
+              {/* personal hook */}
+              <p className="text-xl text-white/80 max-w-xl leading-relaxed mb-3 font-medium">
+                I love three things: AI, building real products, and pizza. 🍕
+              </p>
+              <p className="text-base text-white/55 max-w-xl leading-relaxed mb-10">
+                CortexKitchen is what happens when all three collide. A production multi-agent AI platform where five specialist agents run in parallel through a 9-node LangGraph pipeline, verified by a critic across five quality dimensions, streamed live to the operator. One verified pre-shift brief in under 90 seconds.
+              </p>
 
-                {/* demand forecast */}
-                <div className="relative rounded-3xl border border-blue-400/30 bg-[#0d0d0d]/90 px-6 py-4 min-w-[220px] text-center">
-                  <p className="text-white text-sm font-semibold">Demand Forecast</p>
-                  <p className="text-[11px] text-white/40 mt-1.5 tracking-wide">Prophet · peak detection · confidence band</p>
-                </div>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href="https://github.com/anoushka45/cortexkitchen"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative px-6 py-3 rounded-xl bg-orange-500 text-white text-sm font-bold hover:bg-orange-400 transition overflow-hidden"
+                >
+                  <span className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-200" />
+                  <span className="relative flex items-center gap-2">
+                    <Image src={`${LOGO}/github.png`} alt="" width={15} height={15} className="opacity-90" />
+                    GitHub
+                  </span>
+                </a>
+                <span className="px-6 py-3 rounded-xl border border-white/12 text-white/45 text-sm font-mono">
+                  Demo coming soon
+                </span>
+              </div>
+            </div>
 
-                {/* fan-out */}
-                <div className="flex flex-col items-center">
-                  <div className="w-[2px] h-10 bg-gradient-to-b from-blue-400/70 to-cyan-400/20" />
-                  <div className="w-[65vw] max-w-[850px] h-[2px] bg-gradient-to-r from-transparent via-orange-400/40 to-transparent relative">
-                    {[12, 37, 63, 88].map((p) => (
-                      <div
-                        key={p}
-                        className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-orange-300 shadow-[0_0_16px_rgba(251,146,60,0.8)]"
-                        style={{ left: `${p}%` }}
-                      />
-                    ))}
-                  </div>
-                  <div className="mt-3 text-[11px] uppercase tracking-[0.3em] text-orange-200/60 font-mono">
-                    concurrent superstep — 4 specialists
-                  </div>
-                </div>
-
-                {/* 4 parallel agents */}
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mt-8 w-full max-w-6xl">
-                  {[
-                    { title: "Bookings & Tables", desc: "occupancy · waitlist pressure · capacity", color: "cyan" },
-                    { title: "Guest Feedback", desc: "RAG over Qdrant · complaint patterns · SOPs", color: "pink" },
-                    { title: "Menu Intelligence", desc: "push / ease-back / avoid · stock-aligned", color: "yellow" },
-                    { title: "Stock & Inventory", desc: "shortage alerts · spoilage · restock priority", color: "teal" },
-                  ].map((a) => (
-                    <div key={a.title} className="rounded-[24px] border border-white/10 bg-[#0d0d0d]/95 p-4 hover:-translate-y-1 transition-transform duration-300">
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="w-2.5 h-2.5 rounded-full bg-orange-300 shadow-[0_0_14px_rgba(251,146,60,0.9)]" />
-                        <div className="h-[1px] flex-1 bg-gradient-to-r from-orange-400/30 to-transparent" />
-                      </div>
-                      <h3 className="text-white text-sm font-semibold">{a.title}</h3>
-                      <p className="text-xs text-white/45 mt-2 leading-5">{a.desc}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* merge */}
-                <div className="flex flex-col items-center mt-8">
-                  <div className="w-[65vw] max-w-[850px] h-[2px] bg-gradient-to-r from-transparent via-green-400/40 to-transparent relative">
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-green-300 shadow-[0_0_24px_rgba(52,211,153,0.9)]" />
-                  </div>
-                  <div className="w-[2px] h-10 bg-gradient-to-b from-green-400/70 to-white/10" />
-                </div>
-
-                {/* final nodes */}
-                <div className="flex flex-col items-center gap-5 w-full max-w-md">
-                  {[
-                    { title: "Aggregator", desc: "merge all domain outputs · assemble RAG context", border: "border-orange-400/20" },
-                    { title: "Critic / Quality Gate", desc: "5-dim scoring · approve / revision / reject", border: "border-green-400/30" },
-                    { title: "Final Assembler", desc: "shape API response · append execution trace", border: "border-white/15" },
-                  ].map((n) => (
-                    <div key={n.title} className={`relative w-full rounded-[24px] ${n.border} border bg-[#0d0d0d]/95 p-4 hover:-translate-y-0.5 transition-transform duration-300`}>
-                      <div className="flex items-center gap-4">
-                        <div className="w-3 h-3 rounded-full bg-orange-300 shadow-[0_0_14px_rgba(251,146,60,0.9)]" />
-                        <div>
-                          <h3 className="text-white text-sm font-semibold">{n.title}</h3>
-                          <p className="text-xs text-white/45 mt-1">{n.desc}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+            {/* Right: logo with concentric pulse rings */}
+            <div className="flex-shrink-0 flex items-center justify-center md:justify-end">
+              <div className="relative float-logo">
+                {/* pulse rings */}
+                <div className="ring-pulse-1 absolute inset-0 rounded-full border border-orange-500/50" />
+                <div className="ring-pulse-2 absolute inset-0 rounded-full border border-orange-400/35" />
+                <div className="ring-pulse-3 absolute inset-0 rounded-full border border-orange-300/20" />
+                {/* outer glow */}
+                <div className="absolute -inset-6 rounded-full bg-orange-500/15 blur-3xl" />
+                {/* ring */}
+                <div className="relative w-56 h-56 md:w-72 md:h-72 rounded-full border border-orange-500/30 bg-[#0c0c0c] overflow-hidden">
+                  <Image
+                    src={`${SC}/ck-logo.png`}
+                    alt="CortexKitchen"
+                    width={288}
+                    height={288}
+                    className="object-contain w-full h-full"
+                    style={{ mixBlendMode: "screen" }}
+                  />
                 </div>
               </div>
             </div>
           </div>
-
-          {/* pipeline running screenshot */}
-          <div onClick={() => setLightbox({ src: S.pipelineRunning, caption: "Pipeline mid-run — Ops Manager + Demand Forecast done, 4 specialists running in parallel" })} className="cursor-zoom-in">
-            <Shot src={S.pipelineRunning} caption="Pipeline mid-run — Ops Manager + Demand Forecast done, 4 specialists running in parallel" className="mt-10" />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-            <Card>
-              <h3 className="text-white font-semibold mb-2">Hybrid Intelligence</h3>
-              <p className="text-sm text-white-200 leading-6">
-                Deterministic services compute structured signals. LLMs are introduced only for synthesis and interpretation — where they add value without adding correctness risk.
-              </p>
-            </Card>
-            <Card>
-              <h3 className="text-white font-semibold mb-2">Typed Shared State</h3>
-              <p className="text-sm text-white-200 leading-6">
-                All nodes communicate through a typed{" "}
-                <code className="text-orange-300 font-mono text-xs">OrchestratorState</code>{" "}
-                TypedDict. The keep_last reducer handles concurrent writes from the parallel superstep safely.
-              </p>
-            </Card>
-            <Card>
-              <h3 className="text-white font-semibold mb-2">Provider Independence</h3>
-              <p className="text-sm text-white-200 leading-6">
-                Agents receive an injected{" "}
-                <code className="text-orange-300 font-mono text-xs">BaseLLMProvider</code>{" "}
-                — no direct imports. Groq is primary; Gemini is the automatic fallback. Swap with one env var change.
-              </p>
-            </Card>
-          </div>
         </section>
 
-        {/* ════════════════════════════════════════
-            INTELLIGENCE NODES
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10">
-          <Label>Intelligence Nodes</Label>
-          <SectionTitle>9 specialised nodes. Each owns a distinct operational domain.</SectionTitle>
+        {/* Hero screenshot */}
+        <div className="mb-28">
+          <div className="relative">
+            <div className="absolute -inset-px rounded-3xl bg-gradient-to-r from-orange-500/30 via-blue-500/20 to-purple-500/30 blur-sm" />
+            <div
+              onClick={() => open(`${SC}/03_dashboard/03_plan_approved_top.png`, "Dashboard: Plan Approved, Critic 0.92, five agent metric cards")}
+              className="relative cursor-zoom-in"
+            >
+              <Shot
+                src={`${SC}/03_dashboard/03_plan_approved_top.png`}
+                caption="Dashboard: Plan APPROVED, Critic 0.92/1.00, demand forecast, reservation pressure, complaints, inventory, menu signals"
+              />
+            </div>
+          </div>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
+        {/* ═══════════════════════════════════════════════════════
+            THE PROBLEM
+        ══════════════════════════════════════════════════════ */}
+        <section id="problem" className="py-24 border-t border-white/5">
+          <SectionLabel>The Problem</SectionLabel>
+          <SectionHeading>Restaurants are data-rich, <span className="text-orange-400">insight-poor</span></SectionHeading>
+          <p className="text-white/60 text-lg max-w-2xl mb-12 leading-relaxed">
+            Before every shift, a restaurant manager needs to synthesize demand signals, reservation data, guest complaints, inventory status, and menu performance. These live in four different systems, a spreadsheet, and a group chat. There is no synthesis layer.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
             {[
-              { badge: "Entry · Deterministic", title: "Ops Manager", desc: "Validates the scenario against the registry. If invalid, short-circuits directly to Final Assembler — no domain nodes run. Sets scenario metadata in shared state." },
-              { badge: "Forecasting · Prophet", title: "Demand Forecast", desc: "Fits a Prophet model on historical order data. Produces a yhat estimate with upper/lower confidence bounds and a peak_ratio for the service window. Runs first — Inventory and Menu depend on its output." },
-              { badge: "Analysis · SQL + LLM", title: "Bookings & Tables", desc: "Reads reservation records, calculates slot-level occupancy, and identifies high-pressure windows. Deterministic for numeric analysis; LLM used only for natural-language interpretation." },
-              { badge: "RAG · LLM", title: "Guest Feedback", desc: "Retrieves semantically similar complaints and SOPs from Qdrant using cosine similarity. LLM synthesises them into a structured risk summary with recommended mitigations." },
-              { badge: "Analysis · LLM", title: "Menu Intelligence", desc: "Computes item-level sales velocity, classifies top performers and underperformers, and generates scenario-aware push / ease-back / avoid promotion suggestions." },
-              { badge: "Rule-Based · LLM", title: "Stock & Inventory", desc: "Checks stock against reorder thresholds and spoilage flags. A 40% demand spike elevates a marginal stock level to a critical shortage — feasibility-aware planning." },
-              { badge: "Deterministic", title: "Aggregator", desc: "No LLM call. Merges all four parallel domain outputs into a single recommendations object and assembles the RAG context payload for the critic." },
-              { badge: "Evaluation · LLM", title: "Critic / Quality Gate", desc: "The quality gate. Scores across 5 dimensions and returns a verdict — approved, revision, or rejected — with annotated reasoning and cost-aware penalty logic." },
-              { badge: "Output · Deterministic", title: "Final Assembler", desc: "Shapes the final API response with full metadata, token cost, and node-level latency. Handles error paths cleanly. Appends execution trace when debug flag is set." },
-            ].map((n) => (
-              <Card key={n.title} className="hover:border-orange-400/25 transition duration-200">
-                <span className="px-2 py-0.5 rounded text-xs bg-black-100 border border-white/10 text-white-200 inline-block mb-3 font-mono">
-                  {n.badge}
-                </span>
-                <h3 className="text-lg font-semibold text-white">{n.title}</h3>
-                <p className="text-sm text-white-200 mt-2 leading-6">{n.desc}</p>
+              { title: "Unpredictable demand",  body: "Rush hours arrive without warning. Staffing decisions are made on gut feel, not data. When the 7 PM spike hits and you're understaffed, it's too late." },
+              { title: "Fragmented signals",    body: "Complaints in one system. Reservations in another. Inventory in a spreadsheet. No one has the full picture before service starts." },
+              { title: "Recurring problems",    body: "The same complaint surfaces every Friday. The same item runs out mid-service. Without pattern detection, nothing improves." },
+              { title: "Menu pushed blind",     body: "Staff push specials based on chef preference, not demand signals or stock levels. High food cost, low sell-through, frustrated guests." },
+              { title: "Mid-service surprises", body: "A key ingredient runs out at 8 PM. A spoilage risk wasn't caught during prep. Shortages discovered mid-service are the most expensive kind." },
+              { title: "No audit trail",        body: "When a shift goes badly, there's no record of what was recommended, what was decided, or why. No learning happens. History repeats." },
+            ].map(({ title, body }) => (
+              <Card key={title}>
+                <h4 className="text-white font-semibold mb-2">{title}</h4>
+                <p className="text-sm text-white/55 leading-6">{body}</p>
               </Card>
             ))}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-            <div onClick={() => setLightbox({ src: S.servicePlanning, caption: "Service Planning — Prophet forecast + reservation pressure" })} className="cursor-zoom-in">
-              <Shot src={S.servicePlanning} caption="Service Planning — Prophet forecast + reservation pressure" />
+          {/* Product homepage screenshots */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div onClick={() => open(`${SC}/01_homepage/hero.png`, "CortexKitchen homepage hero")} className="cursor-zoom-in">
+              <Shot src={`${SC}/01_homepage/hero.png`} caption="Homepage: 'Five specialists. One verified brief.' with live dashboard preview" />
             </div>
-            <div onClick={() => setLightbox({ src: S.menuDirection, caption: "Menu Direction — push / ease-back / avoid strategy" })} className="cursor-zoom-in">
-              <Shot src={S.menuDirection} caption="Menu Direction — push / ease-back / avoid strategy" />
-            </div>
-            <div onClick={() => setLightbox({ src: S.operationalRisk, caption: "Operational Risk — complaints + inventory shortage alerts" })} className="cursor-zoom-in">
-              <Shot src={S.operationalRisk} caption="Operational Risk — complaints + inventory shortage alerts" />
+            <div onClick={() => open(`${SC}/01_homepage/pipeline.png`, "Homepage pipeline explainer")} className="cursor-zoom-in">
+              <Shot src={`${SC}/01_homepage/pipeline.png`} caption="Homepage pipeline section: Orchestrator to specialists to Quality Check" />
             </div>
           </div>
         </section>
-        {lightbox ? (
-          // @ts-ignore
-          <Lightbox src={lightbox.src} caption={lightbox.caption} onClose={() => setLightbox(null)} />
-        ) : null}
 
-        {/* ════════════════════════════════════════
-            CRITIC GATE
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10">
-          <Label>Critic System</Label>
-          <SectionTitle>Nothing reaches the operator unreviewed.</SectionTitle>
-          <p className="text-white-200 mt-4 max-w-3xl leading-7">
-            The Critic Agent is structurally part of the orchestration graph — not a post-hoc check. Every aggregated plan is scored across five dimensions before the operator sees anything. The Critic returns a 0.0–1.0 score, a verdict, and annotated revision reasons. Below threshold → blocked. Borderline → revision loop.
+        {/* ═══════════════════════════════════════════════════════
+            PIPELINE
+        ══════════════════════════════════════════════════════ */}
+        <section id="pipeline" className="py-24 border-t border-white/5">
+          <SectionLabel color="blue">Architecture</SectionLabel>
+          <SectionHeading>A 9-node LangGraph pipeline, <span className="text-blue-400">not just another chatbot</span></SectionHeading>
+          <p className="text-white/60 text-lg max-w-2xl mb-6 leading-relaxed">
+            Every planning run executes a deterministic stateful DAG. Each node receives a typed <code className="text-orange-300 font-mono text-sm">OrchestratorState</code>, updates its output key, and passes state forward. LLMs are introduced only where they add value over deterministic alternatives.
+          </p>
+          <p className="text-xs font-mono text-white/30 uppercase tracking-widest mb-10">Click any node below to inspect its implementation</p>
+
+          {/* Animated pipeline diagram */}
+          <div className="relative rounded-3xl border border-white/10 bg-[#0d0d0d] p-8 md:p-12 mb-8 overflow-hidden">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-500/5 blur-[100px] pointer-events-none" />
+
+            <p className="text-xs font-mono text-white/30 uppercase tracking-widest text-center mb-12">
+              LangGraph StateGraph -9 nodes -parallel fan-out
+            </p>
+
+            <div className="relative z-10 flex flex-col items-center gap-3">
+              {/* Sequential: nodes 1, 2 */}
+              {nodes.slice(0, 2).map((node) => (
+                <React.Fragment key={node.n}>
+                  <button
+                    onClick={() => setActiveNode(activeNode === node.n ? null : node.n)}
+                    className={`w-full max-w-sm rounded-xl border px-6 py-4 text-center transition-all duration-200 ${colorMap[node.color]} ${activeNode === node.n ? glowMap[node.color] : "hover:scale-[1.02]"}`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-mono opacity-60">{node.n}</span>
+                      <Tag color={node.color as "orange"}>{node.tag}</Tag>
+                    </div>
+                    <p className="text-white font-semibold mt-2">{node.name}</p>
+                    {activeNode === node.n && (
+                      <p className="text-xs text-white/60 mt-3 text-left leading-5">{node.detail}</p>
+                    )}
+                  </button>
+                  {node.n < 2 && (
+                    <div className="w-px h-6 bg-gradient-to-b from-orange-500/60 to-blue-500/30" />
+                  )}
+                </React.Fragment>
+              ))}
+
+              {/* Fan-out label */}
+              <div className="w-full flex items-center gap-4 my-2">
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                <span className="text-xs font-mono text-white/30 uppercase tracking-widest whitespace-nowrap">parallel superstep</span>
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+              </div>
+
+              {/* Parallel 4 */}
+              <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 w-full">
+                {nodes.slice(2, 6).map((node) => (
+                  <button
+                    key={node.n}
+                    onClick={() => setActiveNode(activeNode === node.n ? null : node.n)}
+                    className={`rounded-xl border px-4 py-4 text-left transition-all duration-200 ${colorMap[node.color]} ${activeNode === node.n ? glowMap[node.color] : "hover:scale-[1.02]"}`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-mono opacity-60">{node.n}</span>
+                      <Tag color={node.color as "orange"}>{node.tag}</Tag>
+                    </div>
+                    <p className="text-white text-sm font-semibold">{node.name}</p>
+                    {activeNode === node.n && (
+                      <p className="text-xs text-white/60 mt-2 leading-5">{node.detail}</p>
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              {/* Merge label */}
+              <div className="w-full flex items-center gap-4 my-2">
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-green-500/30 to-transparent" />
+                <span className="text-xs font-mono text-white/30 uppercase tracking-widest whitespace-nowrap">merge outputs</span>
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-green-500/30 to-transparent" />
+              </div>
+
+              {/* Final 3 nodes */}
+              {nodes.slice(6).map((node, i) => (
+                <React.Fragment key={node.n}>
+                  {i > 0 && <div className="w-px h-5 bg-gradient-to-b from-green-500/50 to-white/10" />}
+                  <button
+                    onClick={() => setActiveNode(activeNode === node.n ? null : node.n)}
+                    className={`w-full max-w-sm rounded-xl border px-6 py-4 text-center transition-all duration-200 ${colorMap[node.color]} ${activeNode === node.n ? glowMap[node.color] : "hover:scale-[1.02]"}`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-mono opacity-60">{node.n}</span>
+                      <Tag color={node.color as "orange"}>{node.tag}</Tag>
+                    </div>
+                    <p className="text-white font-semibold mt-2">{node.name}</p>
+                    {activeNode === node.n && (
+                      <p className="text-xs text-white/60 mt-3 text-left leading-5">{node.detail}</p>
+                    )}
+                  </button>
+                </React.Fragment>
+              ))}
+
+            </div>
+          </div>
+
+          {/* Pipeline in action */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div onClick={() => open(`${SC}/03_dashboard/02_loading_screen.png`, "Live pipeline mid-run")} className="cursor-zoom-in">
+              <Shot src={`${SC}/03_dashboard/02_loading_screen.png`} caption="Live pipeline: Ops Manager done, Demand Forecast done, 4 specialists executing in parallel" tall />
+            </div>
+            <div onClick={() => open(`${SC}/03_dashboard/04_full_plan_scroll.png`, "Full plan after pipeline completes")} className="cursor-zoom-in">
+              <Shot src={`${SC}/03_dashboard/04_full_plan_scroll.png`} caption="Completed plan view: critic verdict banner, service planning, menu direction, operational risk" tall />
+            </div>
+          </div>
+
+          {/* Architecture principles */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card>
+              <Tag color="blue">Hybrid compute</Tag>
+              <h4 className="text-white font-semibold mt-3 mb-2">LLMs where they earn it</h4>
+              <p className="text-sm text-white/60 leading-6">Reservation and Inventory nodes use SQL and rule-based logic for numeric analysis. LLMs introduced only for synthesis and interpretation where deterministic approaches fall short.</p>
+            </Card>
+            <Card>
+              <Tag color="purple">Typed state</Tag>
+              <h4 className="text-white font-semibold mt-3 mb-2">OrchestratorState TypedDict</h4>
+              <p className="text-sm text-white/60 leading-6">All 9 nodes communicate through a typed shared state. The <code className="text-orange-300 font-mono text-xs">keep_last</code> reducer handles concurrent writes from the parallel superstep without conflict.</p>
+            </Card>
+            <Card>
+              <Tag color="green">Provider-agnostic</Tag>
+              <h4 className="text-white font-semibold mt-3 mb-2">BaseLLMProvider abstraction</h4>
+              <p className="text-sm text-white/60 leading-6">Agents never import providers directly. They receive an injected <code className="text-orange-300 font-mono text-xs">BaseLLMProvider</code>. Groq primary, Gemini auto-fallback. One env var to swap everything.</p>
+            </Card>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════
+            SCENARIOS
+        ══════════════════════════════════════════════════════ */}
+        <section id="scenarios" className="py-24 border-t border-white/5">
+          <SectionLabel color="purple">Scenarios</SectionLabel>
+          <SectionHeading>Four shift contexts. <span className="text-purple-400">One planning system.</span></SectionHeading>
+          <p className="text-white/60 text-lg max-w-2xl mb-12 leading-relaxed">
+            Each scenario preset changes the demand profile, risk weighting, and critic thresholds. The same 9-node graph adapts its behavior based on the context it receives in state.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mt-10">
-            {[
-              { dim: "Safety", desc: "No allergen risk, no understaffed peaks, no capacity violations." },
-              { dim: "Feasibility", desc: "Stock and staffing can actually support what's recommended." },
-              { dim: "Evidence", desc: "Every claim backed by retrieved complaints and SOPs." },
-              { dim: "Actionability", desc: "Concrete steps a chef or manager can execute immediately." },
-              { dim: "Clarity", desc: "Structured, unambiguous, easy to skim 5 minutes before shift." },
-            ].map(({ dim, desc }) => (
-              <div key={dim} className="rounded-xl bg-black-200 border border-white/10 p-5 text-center hover:border-orange-400/25 transition">
-                <div className="text-sm font-semibold text-white mb-2">{dim}</div>
-                <div className="text-xs text-white-200 leading-5">{desc}</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+            {scenarios.map(({ id, label, color, desc }) => (
+              <div key={id} className={`rounded-2xl border bg-[#111] p-6 hover:border-white/25 transition ${colorMap[color as "orange"].split(" ")[0]}`}>
+                <Tag color={color as "orange"}>{id}</Tag>
+                <h4 className="text-white font-semibold mt-3 mb-2">{label}</h4>
+                <p className="text-sm text-white/60 leading-6">{desc}</p>
               </div>
             ))}
           </div>
 
-          <div className="flex items-center justify-center gap-4 mt-8 flex-wrap">
-            <span className="px-5 py-2 rounded-full border border-green-400/30 text-green-300 bg-green-400/10 text-sm font-medium">Approved</span>
-            <span className="text-white/30">·</span>
-            <span className="px-5 py-2 rounded-full border border-yellow-400/30 text-yellow-300 bg-yellow-400/10 text-sm font-medium">Revision Loop</span>
-            <span className="text-white/30">·</span>
-            <span className="px-5 py-2 rounded-full border border-red-400/30 text-red-300 bg-red-400/10 text-sm font-medium">Rejected</span>
-          </div>
-
-          <Card className="mt-8">
-            <div className="font-semibold text-white mb-2">Cost-Aware Scoring</div>
-            <div className="text-sm text-white-200 leading-6">
-              A separate layer evaluates operational tradeoffs beyond the five dimensions — prep burden against forecast confidence, stock risk, reservation pressure. High operational pressure can suppress feasibility and actionability scores. The operator sees a cost-aware breakdown alongside the critic verdict.
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div onClick={() => open(`${SC}/03_dashboard/01_idle_scenario_select.png`, "Scenario selector on dashboard")} className="cursor-zoom-in">
+              <Shot src={`${SC}/03_dashboard/01_idle_scenario_select.png`} caption="Dashboard idle: Select from four scenario presets before running the pipeline" />
             </div>
-          </Card>
+            <div onClick={() => open(`${SC}/03_dashboard/dashboard_running.png`, "Dashboard while pipeline is executing")} className="cursor-zoom-in">
+              <Shot src={`${SC}/03_dashboard/dashboard_running.png`} caption="Dashboard running: real-time pipeline status as agents complete" />
+            </div>
+          </div>
         </section>
 
-        {/* ════════════════════════════════════════
-            STREAMING & REAL-TIME
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10">
-          <Label>Streaming &amp; Real-Time</Label>
-          <SectionTitle>Two independent streams.</SectionTitle>
-          <p className="text-white-200 mt-4 max-w-3xl leading-7">
-            Planning and chat use completely separate transport mechanisms. Each solves a different real-time problem.
-          </p>
+        {/* ═══════════════════════════════════════════════════════
+            CAPABILITIES
+        ══════════════════════════════════════════════════════ */}
+        <section id="capabilities" className="py-24 border-t border-white/5">
+          <SectionLabel color="cyan">Capabilities</SectionLabel>
+          <SectionHeading>What the system <span className="text-cyan-400">actually produces</span></SectionHeading>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-            <Card>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="px-2.5 py-1 rounded-md text-xs font-mono bg-blue-400/10 border border-blue-400/20 text-blue-300">
-                  POST /api/v1/planning/stream
-                </span>
+          {/* Demand + Reservations */}
+          <div className="mb-16">
+            <div className="flex items-center gap-3 mb-6">
+              <Tag color="blue">Node 2 + 3</Tag>
+              <h3 className="text-white font-bold text-xl">Demand Forecast & Reservation Pressure</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+              <div onClick={() => open(`${SC}/03_dashboard/05_service_planning.png`, "Service Planning: demand forecast + reservation pressure")} className="cursor-zoom-in">
+                <Shot src={`${SC}/03_dashboard/05_service_planning.png`} caption="Prophet demand bar chart by hour with peak detection + reservation pressure panel" />
               </div>
-              <h3 className="font-semibold text-white mb-3 text-lg">Planning SSE</h3>
-              <p className="text-sm text-white-200 leading-6">
-                As each LangGraph node completes, a{" "}
-                <code className="text-orange-300 font-mono text-xs">node_complete</code>{" "}
-                event is emitted carrying the node name. The loading screen pipeline diagram updates in real time — you see exactly which agents are done, running, or waiting. A final{" "}
-                <code className="text-orange-300 font-mono text-xs">complete</code>{" "}
-                event delivers the full plan payload in one shot.
-              </p>
-              <div className="flex flex-wrap gap-2 mt-4">
-                <Chip>FastAPI SSE</Chip>
-                <Chip>LangGraph</Chip>
-                <Chip>JWT-protected</Chip>
+              <div className="space-y-3 text-sm text-white/65 leading-7">
+                <p>Prophet fits a time-series model on historical order data and returns a <code className="text-blue-300 font-mono text-xs">yhat</code> estimate with upper/lower confidence bounds and a <code className="text-blue-300 font-mono text-xs">peak_ratio</code> for the service window.</p>
+                <p>The Bookings node reads reservation records, calculates slot-level occupancy percentage, identifies high-pressure windows, and flags waitlist risk. Numeric analysis is deterministic; the LLM is used only for natural-language interpretation.</p>
+                <p>Both outputs land in <code className="text-orange-300 font-mono text-xs">OrchestratorState</code> and are used by the Aggregator to build the service planning section of the brief.</p>
               </div>
-            </Card>
-            <Card>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="px-2.5 py-1 rounded-md text-xs font-mono bg-purple/20 border border-purple/30 text-purple">
-                  POST /api/v1/chat
-                </span>
-              </div>
-              <h3 className="font-semibold text-white mb-3 text-lg">Chat Token Stream</h3>
-              <p className="text-sm text-white-200 leading-6">
-                The Ask AI chatbot streams individual tokens word-by-word via AsyncGroq. An entirely separate mechanism from the planning SSE — each{" "}
-                <code className="text-orange-300 font-mono text-xs">{`{"token":"..."}`}</code>{" "}
-                event renders progressively via ReactMarkdown. Multi-turn memory means follow-up questions understand prior context.
-              </p>
-              <div className="flex flex-wrap gap-2 mt-4">
-                <Chip>AsyncGroq</Chip>
-                <Chip>llama-3.3-70b</Chip>
-                <Chip>ReactMarkdown</Chip>
-              </div>
-            </Card>
+            </div>
           </div>
 
-          <Card className="mt-6">
-            <div className="font-semibold text-white mb-2">Redis Caching Layer</div>
-            <p className="text-sm text-white-200 leading-6">
-              1-hour TTL cache keyed by scenario + date. Only{" "}
-              <code className="text-orange-300 font-mono text-xs">approved</code>{" "}
-              plans are cached — revision and rejected plans always re-run. Zero LLM cost on cache hits; the{" "}
-              <code className="text-orange-300 font-mono text-xs">cache_hit</code>{" "}
-              flag in the response tells you which path ran. Effectively &lt; 1s response on repeat queries.
+          {/* Menu Intelligence */}
+          <div className="mb-16">
+            <div className="flex items-center gap-3 mb-6">
+              <Tag color="yellow">Node 5</Tag>
+              <h3 className="text-white font-bold text-xl">Menu Intelligence</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+              <div className="space-y-3 text-sm text-white/65 leading-7">
+                <p>Computes item-level sales velocity from historical order data. Classifies top performers and underperformers. Generates scenario-aware push / ease-back / avoid promotion suggestions.</p>
+                <p>Menu recommendations are explicitly aligned to the demand forecast: if Prophet signals a 40% demand spike, push items with sufficient stock and high margin. Avoid items with stock risk.</p>
+                <p>Strategy is returned with a priority level and the reasoning behind each recommendation so the chef can agree or override.</p>
+              </div>
+              <div onClick={() => open(`${SC}/03_dashboard/06_menu_direction.png`, "Menu Direction: push/ease-back/avoid with strategy priority")} className="cursor-zoom-in">
+                <Shot src={`${SC}/03_dashboard/06_menu_direction.png`} caption="Menu Intelligence output: items to push, ease back on, and avoid with priority strategy" />
+              </div>
+            </div>
+          </div>
+
+          {/* Guest Feedback RAG + Inventory */}
+          <div className="mb-16">
+            <div className="flex items-center gap-3 mb-6">
+              <Tag color="pink">Node 4</Tag>
+              <Tag color="teal">Node 6</Tag>
+              <h3 className="text-white font-bold text-xl">Guest Feedback (RAG) + Inventory</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+              <div onClick={() => open(`${SC}/03_dashboard/07_operational_risk.png`, "Complaint intelligence + inventory shortage alerts")} className="cursor-zoom-in">
+                <Shot src={`${SC}/03_dashboard/07_operational_risk.png`} caption="Complaint Intelligence: top issues, action items. Inventory Status: shortage alerts with severity." />
+              </div>
+              <div className="space-y-3 text-sm text-white/65 leading-7">
+                <p>Guest Feedback retrieves semantically similar complaints and SOPs from Qdrant via cosine similarity. The LLM synthesises them into a risk summary with recommended mitigations. Raw context is preserved and shown in the RAG Context Drawer.</p>
+                <p>Inventory checks stock against reorder thresholds and spoilage flags. Critically, a 40% demand spike from the forecast can elevate a marginal stock level to a critical shortage. Feasibility-aware -the Critic can reject a plan that ignores inventory risk.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* What-If + Streaming */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <Tag color="orange">SSE Streaming</Tag>
+                <h3 className="text-white font-bold">Live pipeline diagram</h3>
+              </div>
+              <p className="text-sm text-white/60 mb-4 leading-6">
+                As each LangGraph node completes, a <code className="text-orange-300 font-mono text-xs">node_complete</code> event is emitted over SSE. The loading screen pipeline diagram updates in real time. A final <code className="text-orange-300 font-mono text-xs">complete</code> event delivers the full plan in one shot. Entirely separate from the chat token stream.
+              </p>
+              <Card className="text-sm text-white/60 font-mono">
+                <div>POST /api/v1/planning/stream</div>
+                <div className="text-orange-300 mt-1">event: node_complete -data: {"{"}"node": "demand_forecast"{"}"}</div>
+                <div className="text-green-400">event: complete -data: {"{"}"plan": ...{"}"}</div>
+              </Card>
+            </div>
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <Tag color="purple">What-If</Tag>
+                <h3 className="text-white font-bold">Zero-LLM simulator</h3>
+              </div>
+              <p className="text-sm text-white/60 mb-4 leading-6">
+                Slide cover count from 35 to 195. Cost pressure, benefit, and tradeoff scores update instantly via <code className="text-orange-300 font-mono text-xs">CostAwareScoringService</code>. No LangGraph execution, no tokens consumed. Operators explore demand scenarios without cost.
+              </p>
+              <div onClick={() => open(`${SC}/03_dashboard/08_what_if_simulator.png`, "What-If Simulator")} className="cursor-zoom-in">
+                <Shot src={`${SC}/03_dashboard/08_what_if_simulator.png`} caption="Cover count 135: cost pressure 67, benefit 73, tradeoff scores update instantly" tall />
+              </div>
+            </div>
+          </div>
+
+          {/* Ask AI */}
+          <div className="mb-16">
+            <div className="flex items-center gap-3 mb-6">
+              <Tag color="pink">RAG Chatbot</Tag>
+              <h3 className="text-white font-bold text-xl">Ask AI: Conversational intelligence over your data</h3>
+            </div>
+            <p className="text-sm text-white/60 mb-6 leading-6 max-w-2xl">
+              Not generic AI. Grounded in your restaurant's actual run history, inventory records, and guest feedback. Groq llama-3.3-70b with AsyncGroq SSE token streaming. Multi-turn memory -follow-ups understand prior context. Separate transport from the planning SSE.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <div onClick={() => open(`${SC}/05_chat/01_empty_state.png`, "Ask AI empty state")} className="cursor-zoom-in">
+                <Shot src={`${SC}/05_chat/01_empty_state.png`} caption="Empty state: suggested questions surface on first load" />
+              </div>
+              <div onClick={() => open(`${SC}/05_chat/02_conversation_complaints.png`, "Ask AI answering a complaint question")} className="cursor-zoom-in">
+                <Shot src={`${SC}/05_chat/02_conversation_complaints.png`} caption="Active conversation: top complaints, specific incidents, improvement steps from real data" />
+              </div>
+              <div onClick={() => open(`${SC}/05_chat/03_conversation_performance.png`, "Performance overview from Ask AI")} className="cursor-zoom-in">
+                <Shot src={`${SC}/05_chat/03_conversation_performance.png`} caption="Multi-turn: 'How is my restaurant performing?' -feedback counts, avg demand, plan scores" />
+              </div>
+            </div>
+          </div>
+
+          {/* Run History */}
+          <div className="mb-16">
+            <div className="flex items-center gap-3 mb-6">
+              <Tag color="green">Audit Trail</Tag>
+              <h3 className="text-white font-bold text-xl">Run history: every decision traceable</h3>
+            </div>
+            <p className="text-sm text-white/60 mb-6 leading-6 max-w-2xl">
+              Every planning run persisted as a <code className="text-orange-300 font-mono text-xs">PlanningRun</code> record in PostgreSQL -full response, critic output, RAG context, and recommendations as JSONB. Filter by scenario, verdict, and date range. Critic score trend chart across all runs.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div onClick={() => open(`${SC}/04_runs/runs_history_audit.png`, "Run history audit page")} className="cursor-zoom-in">
+                <Shot src={`${SC}/04_runs/runs_history_audit.png`} caption="Run history: scenario, date, critic score and verdict; full run list with filter" />
+              </div>
+              <div onClick={() => open(`${SC}/04_runs/run_detail_history_panel.png`, "Run detail panel")} className="cursor-zoom-in">
+                <Shot src={`${SC}/04_runs/run_detail_history_panel.png`} caption="Run detail: critic notes, dimension score bars, revision reasons, PDF/Excel export" />
+              </div>
+            </div>
+          </div>
+
+          {/* Exports */}
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <Tag color="orange">Exports</Tag>
+              <h3 className="text-white font-bold text-xl">Role-aware PDF and Excel</h3>
+            </div>
+            <p className="text-sm text-white/60 mb-6 leading-6 max-w-2xl">
+              PDF chef brief via ReportLab: approved verdict, dimension scores, action items, full agent output. Role-aware Excel workbook: Inventory and Staffing sheet for chefs, Cost Breakdown sheet for owners showing token count, LLM cost, and critic dimension scores per 100.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div onClick={() => open(`${SC}/08_exports/pdf_chef_brief.png`, "PDF chef brief")} className="cursor-zoom-in">
+                <Shot src={`${SC}/08_exports/pdf_chef_brief.png`} caption="PDF Chef Brief: APPROVED 0.90/1.00, action items, critic dimension scores" />
+              </div>
+              <div onClick={() => open(`${SC}/08_exports/excel_inventory_chef_view.png`, "Excel chef view")} className="cursor-zoom-in">
+                <Shot src={`${SC}/08_exports/excel_inventory_chef_view.png`} caption="Excel chef view: shortage alerts with severity, spoilage risk, restock actions" />
+              </div>
+              <div onClick={() => open(`${SC}/08_exports/excel_cost_breakdown_owner_view.png`, "Excel owner view")} className="cursor-zoom-in">
+                <Shot src={`${SC}/08_exports/excel_cost_breakdown_owner_view.png`} caption="Excel owner view: $0.004 per run, token count, critic scores per 100" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════
+            CRITIC GATE
+        ══════════════════════════════════════════════════════ */}
+        <section id="critic" className="py-24 border-t border-white/5">
+          <SectionLabel color="red">Quality Gate</SectionLabel>
+          <SectionHeading>Nothing reaches the operator <span className="text-red-400">unverified</span></SectionHeading>
+          <p className="text-white/60 text-lg max-w-2xl mb-12 leading-relaxed">
+            The Critic is structurally embedded in the graph, not a post-hoc check. It scores every aggregated plan across five dimensions before the operator sees anything. Below threshold: blocked. Borderline: revision loop. Passes: delivered with full dimension breakdown.
+          </p>
+
+          {/* Dimension bars */}
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-10">
+            {criticDimensions.map(({ dim, score, desc }) => {
+              const barColor = score >= 90
+                ? "from-green-500 to-green-400"
+                : score >= 80
+                ? "from-yellow-500 to-yellow-400"
+                : "from-red-500 to-red-400";
+              const scoreColor = score >= 90 ? "text-green-400" : score >= 80 ? "text-yellow-400" : "text-red-400";
+              const borderColor = score >= 90 ? "border-green-500/20" : score >= 80 ? "border-yellow-500/20" : "border-red-500/20";
+              return (
+                <div key={dim} className={`rounded-2xl border ${borderColor} bg-[#111] p-5`}>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-sm font-semibold text-white">{dim}</span>
+                    <span className={`text-xs font-mono font-bold ${scoreColor}`}>{score}/100</span>
+                  </div>
+                  <div className="h-1.5 bg-white/10 rounded-full mb-3">
+                    <div
+                      className={`h-full rounded-full bg-gradient-to-r ${barColor}`}
+                      style={{ width: `${score}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-white/50 leading-5">{desc}</p>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Verdicts */}
+          <div className="flex flex-wrap gap-4 mb-10">
+            <div className="flex items-center gap-3 px-5 py-3 rounded-xl border border-green-500/30 bg-green-500/10">
+              <span className="w-2 h-2 rounded-full bg-green-400" />
+              <span className="text-green-300 font-semibold text-sm">Approved</span>
+              <span className="text-xs text-white/40">score above threshold, plan delivered</span>
+            </div>
+            <div className="flex items-center gap-3 px-5 py-3 rounded-xl border border-yellow-500/30 bg-yellow-500/10">
+              <span className="w-2 h-2 rounded-full bg-yellow-400" />
+              <span className="text-yellow-300 font-semibold text-sm">Revision</span>
+              <span className="text-xs text-white/40">borderline -loop back with annotated feedback</span>
+            </div>
+            <div className="flex items-center gap-3 px-5 py-3 rounded-xl border border-red-500/30 bg-red-500/10">
+              <span className="w-2 h-2 rounded-full bg-red-400" />
+              <span className="text-red-300 font-semibold text-sm">Rejected</span>
+              <span className="text-xs text-white/40">unsafe or infeasible -blocked with reason</span>
+            </div>
+          </div>
+
+          <Card>
+            <h4 className="text-white font-semibold mb-2">Cost-Aware Scoring</h4>
+            <p className="text-sm text-white/60 leading-6">
+              A separate layer evaluates operational tradeoffs beyond the five dimensions. High reservation pressure can suppress feasibility scores. Inventory risk penalizes actionability. The operator sees a cost-aware breakdown alongside the critic verdict -explaining why a plan scored 0.88 instead of 0.95.
             </p>
           </Card>
         </section>
 
-        {/* ════════════════════════════════════════
-            ASK AI / CHATBOT
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10">
-          <Label>Ask AI</Label>
-          <SectionTitle>Conversational intelligence over your actual data.</SectionTitle>
-          <p className="text-white-200 mt-4 max-w-3xl leading-7">
-            The Ask AI chatbot is grounded in your restaurant's own run history, inventory records, and guest feedback — not generic AI knowledge. Groq llama-3.3-70b streams answers token by token. Suggested question cards surface on first load.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
-            <Card>
-              <h3 className="font-semibold text-white mb-2">Multi-turn memory</h3>
-              <p className="text-sm text-white-200 leading-6">Follow-up questions understand prior context in the same session. "What about the Friday runs specifically?" lands correctly after a prior broad question.</p>
-            </Card>
-            <Card>
-              <h3 className="font-semibold text-white mb-2">RAG-grounded answers</h3>
-              <p className="text-sm text-white-200 leading-6">Answers are built from retrieved records in your Postgres runs table and feedback table — not hallucinated. Every answer cites your own operational history.</p>
-            </Card>
-          </div>
-
-          <Shot src={S.chatbot} caption="Ask AI — RAG-grounded conversation over run history and guest feedback" className="mt-6" />
-        </section>
-
-        {/* ════════════════════════════════════════
-            WHAT-IF SIMULATOR
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10">
-          <Label>What-If Simulator</Label>
-          <SectionTitle>Instant scenario exploration — zero LLM calls.</SectionTitle>
-          <p className="text-white-200 mt-4 max-w-3xl leading-7">
-            Slide the cover count from 35 to 195 and the cost pressure, benefit, and tradeoff scores update in real time. No LangGraph execution, no LLM call — purely deterministic scoring via{" "}
-            <code className="text-orange-300 font-mono text-sm">CostAwareScoringService</code>.
-            The operator can explore demand scenarios without burning tokens.
-          </p>
-
-          <Shot src={S.whatIf} caption="What-If Simulator — cover count 135, scores update instantly without a new LLM call" className="mt-8" />
-        </section>
-
-        {/* ════════════════════════════════════════
-            EXPORTS
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10">
-          <Label>Exports</Label>
-          <SectionTitle>Every plan, downloadable. Role-aware.</SectionTitle>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-            <Card>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="px-2.5 py-1 rounded-md text-xs font-mono bg-orange-400/10 border border-orange-400/20 text-orange-300">PDF · ReportLab</span>
-              </div>
-              <h3 className="font-semibold text-white mb-2">Chef Brief</h3>
-              <p className="text-sm text-white-200 leading-6">
-                Print-ready PDF with plan summary, full agent outputs, critic verdict, dimension scores per 100, cost-aware analysis, and prioritised action items. Generated server-side by ReportLab, served via a signed download URL.
-              </p>
-            </Card>
-            <Card>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="px-2.5 py-1 rounded-md text-xs font-mono bg-green-400/10 border border-green-400/20 text-green-300">Excel · openpyxl</span>
-              </div>
-              <h3 className="font-semibold text-white mb-2">Role-Aware Workbook</h3>
-              <p className="text-sm text-white-200 leading-6">
-                A two-sheet <code className="text-orange-300 font-mono text-xs">.xlsx</code> — Inventory &amp; Staffing sheet (chef view: shortage alerts, spoilage risk, restock actions) and Cost Breakdown sheet (owner view: LLM tokens, cost USD, critic dimension scores).
-              </p>
-            </Card>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-            <Shot src={S.pdfExport} caption="PDF Chef Brief — Approved 0.90, action items, dimension scores" />
-            <Shot src={S.excelChef} caption="Excel · Chef View — inventory shortage alerts with severity" />
-            <Shot src={S.excelOwner} caption="Excel · Owner View — token cost, critic scores per 100" />
-          </div>
-        </section>
-
-        {/* ════════════════════════════════════════
-            RUN HISTORY & AUDIT
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10">
-          <Label>Run History &amp; Audit Trail</Label>
-          <SectionTitle>Every run persisted. Every decision traceable.</SectionTitle>
-          <p className="text-white-200 mt-4 max-w-3xl leading-7">
-            Each planning run is stored as a{" "}
-            <code className="text-orange-300 font-mono text-sm">PlanningRun</code>{" "}
-            record in PostgreSQL — full response, critic output, RAG context, and recommendations as JSONB. The /runs page surfaces the complete history with scenario filter, date range picker, and critic score trend chart.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
-            <Card>
-              <h3 className="font-semibold text-white mb-2">Run History</h3>
-              <p className="text-sm text-white-200 leading-6">Filter by scenario, verdict, and date range. Critic score trend chart across all runs. Every session accessible.</p>
-            </Card>
-            <Card>
-              <h3 className="font-semibold text-white mb-2">Critic Drilldown</h3>
-              <p className="text-sm text-white-200 leading-6">Per-run breakdown across all 5 dimensions with revision notes and cost-aware tradeoff flags.</p>
-            </Card>
-            <Card>
-              <h3 className="font-semibold text-white mb-2">RAG Inspection</h3>
-              <p className="text-sm text-white-200 leading-6">The specific complaints and SOPs retrieved for that exact run — preserved through state, not recomputed.</p>
-            </Card>
-          </div>
-
-          <Shot src={S.runs} caption="Plan History — run list with scenario labels, critic scores, and full detail panel" className="mt-6" />
-        </section>
-
-        {/* ════════════════════════════════════════
+        {/* ═══════════════════════════════════════════════════════
             OBSERVABILITY
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10">
-          <Label>Observability</Label>
-          <SectionTitle>Five tools watching every run.</SectionTitle>
+        ══════════════════════════════════════════════════════ */}
+        <section id="observability" className="py-24 border-t border-white/5">
+          <SectionLabel color="cyan">Observability</SectionLabel>
+          <SectionHeading>Five tools <span className="text-cyan-400">watching every run</span></SectionHeading>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
             {[
-              { tool: "LangSmith", desc: "Per-node tracing for every planning run. Latency, token spend, and node lineage. Enabled via LANGSMITH_TRACING env var." },
-              { tool: "OpenTelemetry", desc: "HTTP request tracing via console exporter (OTLP-ready for production). Every API request carries a trace ID." },
-              { tool: "Prometheus", desc: "/metrics scrape endpoint. Latency histograms, throughput, and error rate — drop into Grafana without any code change." },
-              { tool: "Sentry", desc: "Unhandled exception capture with FastAPI integration. LangGraph node failures are wrapped with capture_exception — stack traces tagged by node name." },
-              { tool: "structlog", desc: "JSON-structured logs across all orchestration nodes. Every log entry carries run_id, org_id, node name, token counts, and cost_usd." },
-              { tool: "Observability Panel", desc: "7-day frontend summary: total runs, success rate, avg critic score, avg duration. Breakdown by verdict and scenario. Live from /api/v1/observability/summary." },
-            ].map(({ tool, desc }) => (
-              <Card key={tool} className="hover:border-orange-400/20 transition">
-                <h3 className="font-semibold text-white mb-2">{tool}</h3>
-                <p className="text-sm text-white-200 leading-6">{desc}</p>
+              { tool: "LangSmith",       color: "purple", body: "Per-node traces for every planning run. Latency breakdown per node, token spend, model used. Full trace linked in every run record." },
+              { tool: "OpenTelemetry",   color: "blue",   body: "HTTP request tracing via console exporter. Every API call carries a trace ID. OTLP-ready for production." },
+              { tool: "Prometheus",      color: "orange", body: "/metrics scrape endpoint. Latency histograms, throughput, error rate. Drop into Grafana without any code changes." },
+              { tool: "Sentry",          color: "red",    body: "Unhandled exception capture with FastAPI integration. LangGraph node failures wrapped with capture_exception, tagged by node name." },
+              { tool: "structlog",       color: "green",  body: "JSON-structured logs across all orchestration nodes. Every entry carries run_id, org_id, node name, token counts, cost_usd." },
+              { tool: "Observability Panel", color: "cyan", body: "7-day frontend summary: 59 total runs, 81% success rate, 0.81 avg critic score, 16.6s avg duration, breakdown by verdict and scenario." },
+            ].map(({ tool, color, body }) => (
+              <Card key={tool}>
+                <Tag color={color as "orange"}>{tool}</Tag>
+                <p className="text-sm text-white/60 mt-3 leading-6">{body}</p>
               </Card>
             ))}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-            <Shot src={S.observability} caption="Observability Panel — 59 runs, 81% success, 16.6s avg" />
-            <Shot src={S.langsmith} caption="LangSmith — per-node traces with latency and token breakdown" />
-            <Shot src={S.sentry} caption="Sentry — exception capture tagged by LangGraph node" />
-          </div>
-        </section>
-
-        {/* ════════════════════════════════════════
-            REGRESSION EVALS
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10">
-          <Label>Regression Evals</Label>
-          <SectionTitle>A 90% quality gate on every CI run.</SectionTitle>
-          <p className="text-white-200 mt-4 max-w-3xl leading-7">
-            CortexKitchen is evaluated across five layers — software correctness, LangSmith regression, LLM quality (RAGAS + DeepEval), planning quality, and audit visibility. The CI gate fails the run if the golden dataset pass rate drops below 90%.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
-            <Card>
-              <span className="px-2 py-0.5 rounded text-xs font-mono bg-black-100 border border-white/10 text-orange-300 inline-block mb-3">LangSmith</span>
-              <h3 className="font-semibold text-white mb-2">Golden Dataset</h3>
-              <p className="text-sm text-white-200 leading-6">
-                <code className="text-orange-300 font-mono text-xs">cortexkitchen-golden-v1</code> — 50 curated planning runs across all four scenarios. Built by{" "}
-                <code className="text-orange-300 font-mono text-xs">build_golden_dataset.py</code>. CI gate requires 90% pass rate — below that, the run fails.
-              </p>
-            </Card>
-            <Card>
-              <span className="px-2 py-0.5 rounded text-xs font-mono bg-black-100 border border-white/10 text-blue-300 inline-block mb-3">RAGAS</span>
-              <h3 className="font-semibold text-white mb-2">Retrieval Quality</h3>
-              <p className="text-sm text-white-200 leading-6">
-                Faithfulness ≥ 0.8 on complaint RAG pipeline — every claim must be grounded in retrieved Qdrant context. Context precision ≥ 0.7. Evaluator LLM: Groq llama-3.3-70b.
-              </p>
-            </Card>
-            <Card>
-              <span className="px-2 py-0.5 rounded text-xs font-mono bg-black-100 border border-white/10 text-purple inline-block mb-3">DeepEval</span>
-              <h3 className="font-semibold text-white mb-2">Plan Quality</h3>
-              <p className="text-sm text-white-200 leading-6">
-                HallucinationMetric ≤ 0.5 on critic output. AnswerRelevancyMetric ≥ 0.7 on agent outputs. Checks that the critic doesn't make claims contradicted by the aggregated plan.
-              </p>
-            </Card>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+            <div onClick={() => open(`${SC}/09_observability_tools/langsmith_run_traces.png`, "LangSmith per-node traces")} className="cursor-zoom-in">
+              <Shot src={`${SC}/09_observability_tools/langsmith_run_traces.png`} caption="LangSmith: per-run tracing with latency breakdown per node and scenario labels" />
+            </div>
+            <div onClick={() => open(`${SC}/09_observability_tools/langsmith_golden_dataset.png`, "LangSmith golden dataset")} className="cursor-zoom-in">
+              <Shot src={`${SC}/09_observability_tools/langsmith_golden_dataset.png`} caption="cortexkitchen-golden-v1: 50 curated runs, CI gate at 90% pass rate" />
+            </div>
+            <div onClick={() => open(`${SC}/09_observability_tools/sentry_error_capture.png`, "Sentry error capture")} className="cursor-zoom-in">
+              <Shot src={`${SC}/09_observability_tools/sentry_error_capture.png`} caption="Sentry: RuntimeError from a LangGraph node, full stack trace, tagged by node name" />
+            </div>
           </div>
 
-          <Shot src={S.langsmithGolden} caption="LangSmith — cortexkitchen-golden-v1 · 50 runs across all four scenarios" className="mt-6" />
-        </section>
-
-        {/* ════════════════════════════════════════
-            AUTH & MULTI-TENANT
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10">
-          <Label>Multi-Tenant Auth</Label>
-          <SectionTitle>JWT auth, org-scoped end to end.</SectionTitle>
-          <p className="text-white-200 mt-4 max-w-3xl leading-7">
-            Every planning run, complaint vector, and settings record is scoped to an{" "}
-            <code className="text-orange-300 font-mono text-sm">org_id</code>. The ID is carried through{" "}
-            <code className="text-orange-300 font-mono text-sm">OrchestratorState</code>{" "}
-            at every node — Postgres queries filter by it, Qdrant payload filters enforce it. Two workspaces cannot see each other's data.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
-            <Card>
-              <h3 className="font-semibold text-white mb-2">JWT HS256</h3>
-              <p className="text-sm text-white-200 leading-6">passlib + bcrypt password hashing. Access token on login. All planning, runs, chat, and settings routes are protected. Register UI creates org + user in one step.</p>
-            </Card>
-            <Card>
-              <h3 className="font-semibold text-white mb-2">Complete Org Isolation</h3>
-              <p className="text-sm text-white-200 leading-6">PostgreSQL row-level scoping on all queries. Qdrant payload filter{" "}<code className="text-orange-300 font-mono text-xs">{`{"org_id": id}`}</code>{" "}on complaint and SOP vectors. Settings, profiles, and exports all isolated per workspace.</p>
-            </Card>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+            <div onClick={() => open(`${SC}/06_data_health/observability_panel.png`, "Observability panel")} className="cursor-zoom-in">
+              <Shot src={`${SC}/06_data_health/observability_panel.png`} caption="Observability panel: 59 runs, 81% success, 0.81 avg score, 16.6s avg, breakdown by verdict" />
+            </div>
+            <div onClick={() => open(`${SC}/06_data_health/data_health.png`, "Data health page")} className="cursor-zoom-in">
+              <Shot src={`${SC}/06_data_health/data_health.png`} caption="Data Health: 6,495 orders, 1,201 reservations, 160 feedback records, 18 inventory items" />
+            </div>
           </div>
-        </section>
 
-        {/* ════════════════════════════════════════
-            MCP INTEGRATION
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10">
-          <Label>MCP Integration</Label>
-          <SectionTitle>Run planning from Claude, natively.</SectionTitle>
-          <p className="text-white-200 mt-4 max-w-3xl leading-7">
-            The{" "}
-            <code className="text-orange-300 font-mono text-sm">.mcp.json</code>{" "}
-            in the project root is auto-discovered by Claude Code. The MCP server (built on the Anthropic MCP SDK) exposes two tools over stdio — trigger real planning runs with real auth, real data, and real critic verdicts directly from natural language in Claude Code CLI or Claude Desktop.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
-            <Card>
-              <h3 className="font-semibold text-white mb-3">Two Tools</h3>
-              <div className="space-y-3">
-                <div className="rounded-xl bg-black-100 border border-white/10 p-4">
-                  <code className="text-orange-300 font-mono text-sm">run_planning_scenario</code>
-                  <p className="text-xs text-white-200 mt-1">Execute a full planning pipeline end-to-end — auth, data, critic, verdict.</p>
+          {/* Evals */}
+          <div className="rounded-2xl border border-purple-500/20 bg-purple-500/5 p-8 mb-6">
+            <div className="flex items-center gap-3 mb-6">
+              <Tag color="purple">Automated Evals</Tag>
+              <h3 className="text-white font-bold text-lg">RAGAS + DeepEval + LangSmith CI gate</h3>
+            </div>
+            <p className="text-sm text-white/60 leading-7 mb-8 max-w-2xl">
+              Quality is enforced automatically, not checked manually. Three layers of evaluation run against every version: RAG pipeline quality, LLM output quality, and end-to-end regression against a curated golden dataset in CI.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              <div className="rounded-xl border border-white/10 bg-[#111] p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Image src={`${LOGO}/ragas.png`} alt="RAGAS" width={22} height={22} className="opacity-80" />
+                  <span className="text-white font-semibold text-sm">RAGAS</span>
                 </div>
-                <div className="rounded-xl bg-black-100 border border-white/10 p-4">
-                  <code className="text-orange-300 font-mono text-sm">get_run_history</code>
-                  <p className="text-xs text-white-200 mt-1">Query past runs by scenario, verdict, or date range.</p>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-white/50">Faithfulness</span>
+                    <span className="text-xs font-mono text-green-400 font-bold">0.82 / 0.80 target</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-white/50">Context Precision</span>
+                    <span className="text-xs font-mono text-green-400 font-bold">0.75 / passing</span>
+                  </div>
                 </div>
+                <p className="text-xs text-white/40 mt-3 leading-5">Runs against the complaint RAG pipeline. Verifies retrieved context is actually relevant to the query.</p>
               </div>
-            </Card>
-            <Card className="bg-[#0a0a14]">
-              <h3 className="font-semibold text-white mb-3">From Claude Code</h3>
-              <div className="font-mono text-xs leading-6 text-white-200">
-                <div><span className="text-white/40">&gt; </span><span className="text-green-300">run a friday rush planning scenario</span></div>
-                <div className="ml-4 text-orange-300">→ tool_use: run_planning_scenario</div>
-                <div className="ml-4 text-green-400">→ APPROVED · 0.92 · 14.8s</div>
-                <div className="mt-3"><span className="text-white/40">&gt; </span><span className="text-green-300">show the last 5 approved runs</span></div>
-                <div className="ml-4 text-orange-300">→ tool_use: get_run_history</div>
-                <div className="ml-4 text-green-400">→ 5 results, scenario · score · cost</div>
+              <div className="rounded-xl border border-white/10 bg-[#111] p-5">
+                <span className="text-white font-semibold text-sm">DeepEval</span>
+                <div className="space-y-2 mt-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-white/50">Hallucination</span>
+                    <span className="text-xs font-mono text-green-400 font-bold">0.42 / max 0.50</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-white/50">Answer Relevancy</span>
+                    <span className="text-xs font-mono text-green-400 font-bold">0.78 / 0.70 target</span>
+                  </div>
+                </div>
+                <p className="text-xs text-white/40 mt-3 leading-5">HallucinationMetric on critic output. AnswerRelevancyMetric on agent outputs. Fails loudly if a model starts making things up.</p>
               </div>
-            </Card>
+              <div className="rounded-xl border border-white/10 bg-[#111] p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Image src={`${LOGO}/langsmith.png`} alt="LangSmith" width={22} height={22} className="opacity-80" />
+                  <span className="text-white font-semibold text-sm">Golden Dataset CI</span>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-white/50">Dataset</span>
+                    <span className="text-xs font-mono text-white/70">cortexkitchen-golden-v1</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-white/50">Runs</span>
+                    <span className="text-xs font-mono text-green-400 font-bold">50 curated</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-white/50">CI Gate</span>
+                    <span className="text-xs font-mono text-green-400 font-bold">90% pass rate</span>
+                  </div>
+                </div>
+                <p className="text-xs text-white/40 mt-3 leading-5">pytest-based CI check. Fails the build if fewer than 45 of 50 golden runs score above the critic threshold.</p>
+              </div>
+            </div>
+            <div onClick={() => open(`${SC}/09_observability_tools/langsmith_golden_dataset.png`, "LangSmith golden dataset")} className="cursor-zoom-in">
+              <Shot src={`${SC}/09_observability_tools/langsmith_golden_dataset.png`} caption="cortexkitchen-golden-v1 in LangSmith: 50 curated runs, labeled by scenario, critic score threshold gate" />
+            </div>
           </div>
         </section>
 
-        {/* ════════════════════════════════════════
-            RAG + EXPLAINABILITY
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10">
-          <Label>RAG + Explainability</Label>
-          <SectionTitle>The system shows what it retrieved — not just what it decided.</SectionTitle>
-          <p className="text-white-200 mt-4 max-w-3xl leading-7">
-            The Guest Feedback node retrieves semantically similar complaints and SOPs from Qdrant before the LLM synthesises anything. That raw context is preserved through the full graph and surfaced to the operator in a RAG Context Drawer — so every recommendation has a traceable evidence chain.
-          </p>
+        {/* ═══════════════════════════════════════════════════════
+            TECH STACK + PER-NODE ROUTING
+        ══════════════════════════════════════════════════════ */}
+        <section id="stack" className="py-24 border-t border-white/5">
+          <SectionLabel color="blue">Stack & Architecture</SectionLabel>
+          <SectionHeading><span className="text-blue-400">Production-grade</span> decisions</SectionHeading>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-            <Card>
-              <h3 className="font-semibold text-white mb-3">Retrieval Flow</h3>
-              <div className="text-sm text-white-200 leading-7 space-y-1">
-                <div>Query constructed from operational context</div>
-                <div>→ Embedded and passed to Qdrant cosine similarity search</div>
-                <div>→ Top-k complaints retrieved with similarity scores</div>
-                <div>→ Parallel SOP retrieval for operational guidelines</div>
-                <div>→ Both passed to LLM for synthesis</div>
-                <div>→ Raw items preserved as <code className="text-orange-300 font-mono text-xs">rag_context</code> in the final response</div>
-              </div>
-            </Card>
-            <Card>
-              <h3 className="font-semibold text-white mb-3">Why It Matters</h3>
-              <p className="text-sm text-white-200 leading-7">
-                A black-box recommendation gives a manager no reason to trust the output. CortexKitchen surfaces the exact complaints and SOPs that shaped each recommendation — visible in the dashboard RAG Context Drawer. The operator can agree, disagree, or override based on the same evidence the system used.
-              </p>
-            </Card>
-          </div>
-
-          <Card className="mt-6 bg-black-100">
-            <code className="text-xs text-white-200 leading-6">
-              Active Qdrant collections: <span className="text-orange-300">complaint_memory</span> (embedded complaint texts with platform, type, rating, and date metadata) · <span className="text-orange-300">sop_memory</span> (embedded operational guidelines retrieved against kitchen and service area queries)
-            </code>
-          </Card>
-        </section>
-
-        {/* ════════════════════════════════════════
-            TRADEOFFS
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10">
-          <Label>Tradeoffs</Label>
-          <SectionTitle>Deliberate decisions — not defaults.</SectionTitle>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
-            <Card>
-              <h3 className="font-semibold text-white mb-2">LLMs used selectively</h3>
-              <p className="text-sm text-white-200 leading-6">Reservation and Inventory nodes use deterministic SQL and rule-based logic for numeric analysis. The LLM is invoked only for natural-language interpretation of pre-computed signals. Latency low, correctness high where outcomes are measurable.</p>
-            </Card>
-            <Card>
-              <h3 className="font-semibold text-white mb-2">Demand Forecast runs before the fan-out</h3>
-              <p className="text-sm text-white-200 leading-6">Prophet runs as a dedicated sequential step before the four parallel domain nodes. Both Inventory and Menu Intelligence depend on forecast output — the concurrency boundary is placed after the forecast intentionally.</p>
-            </Card>
-            <Card>
-              <h3 className="font-semibold text-white mb-2">Groq primary, Gemini fallback</h3>
-              <p className="text-sm text-white-200 leading-6">No agent imports a provider directly — they receive an injected <code className="text-orange-300 font-mono text-xs">BaseLLMProvider</code>. If Groq hits a rate limit, <code className="text-orange-300 font-mono text-xs">FallbackLLMProvider</code> retries transparently on Gemini. Adding OpenAI or Claude means implementing one interface.</p>
-            </Card>
-            <Card>
-              <h3 className="font-semibold text-white mb-2">All data is synthetic</h3>
-              <p className="text-sm text-white-200 leading-6">All operational data is seeded synthetically — Friday demand spikes, 7–9 PM reservation clusters, pizza-heavy complaint themes, and deliberate shortage scenarios. Live POS and reservation connectors are scoped to Phase 6.</p>
-            </Card>
-          </div>
-        </section>
-
-        {/* ════════════════════════════════════════
-            PHASE HISTORY
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10">
-          <Label>Build History</Label>
-          <SectionTitle>Five phases. All shipped.</SectionTitle>
-          <p className="text-white-200 mt-4 max-w-3xl leading-7">
-            CortexKitchen was built solo across five phases over multiple months — from initial system design to a full production-grade platform.
-          </p>
-
-          <div className="space-y-4 mt-10">
-            {[
-              {
-                phase: "Phase 0", label: "Design",
-                items: ["Architecture, PRD, system design, data model, API contracts, evaluation rubric"],
-              },
-              {
-                phase: "Phase 1", label: "Core System",
-                items: ["Docker Compose stack · FastAPI app · SQLAlchemy + Alembic · LangGraph 9-node graph · CriticService · Next.js dashboard"],
-              },
-              {
-                phase: "Phase 2", label: "Intelligence",
-                items: ["Prophet demand forecasting · Inventory shortage/overstock alerts · Menu intelligence with promotion strategy"],
-              },
-              {
-                phase: "Phase 3", label: "Multi-Scenario",
-                items: ["Four scenario presets · Persisted planning runs with audit inspection · Cost-aware CriticService"],
-              },
-              {
-                phase: "Phase 4", label: "Productisation",
-                items: ["Multi-tenant auth (JWT HS256) · LangSmith tracing · Structured logging · LLM cost tracking · Configurable restaurant profiles · LLM provider abstraction (BaseLLMProvider / FallbackLLMProvider) · RAGAS + DeepEval evals · MCP server (Anthropic SDK)"],
-              },
-              {
-                phase: "Phase 5", label: "Export · UX · Observability",
-                items: ["PDF + Excel exports (ReportLab / openpyxl) · Redis plan caching · Planning SSE streaming · What-If simulator · OpenTelemetry + Prometheus · Sentry error tracking · LangSmith golden dataset CI gate · Multi-tenant workspace isolation (Postgres + Qdrant) · RAG chatbot (AsyncGroq SSE)"],
-              },
-            ].map(({ phase, label, items }) => (
-              <div key={phase} className="rounded-2xl bg-black-200 border border-white/10 p-6">
+          {/* Per-node model routing */}
+          <div className="mb-12">
+            <h3 className="text-white font-bold text-xl mb-4">Per-node model tier routing</h3>
+            <p className="text-sm text-white/60 mb-6 leading-6 max-w-2xl">
+              With <code className="text-orange-300 font-mono text-sm">COMET_TIERED=true</code>, each LangGraph node routes to a model tier matched to its task complexity. Powered by CometAPI -a unified proxy exposing 500+ models through a single OpenAI-compatible key. Fully opt-in.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div className="rounded-2xl border border-blue-500/30 bg-blue-500/5 p-6">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="px-2.5 py-1 rounded-md text-xs font-mono bg-green-400/10 border border-green-400/20 text-green-300">✓ COMPLETE</span>
-                  <span className="font-mono text-xs text-orange-400">{phase}</span>
-                  <span className="text-white font-semibold">{label}</span>
+                  <Image src={`${LOGO}/deepseek.png`} alt="DeepSeek" width={28} height={28} />
+                  <div>
+                    <Tag color="blue">fast tier</Tag>
+                    <p className="text-xs text-white/50 font-mono mt-0.5">deepseek-v4-flash</p>
+                  </div>
                 </div>
-                <p className="text-sm text-white-200 leading-6">{items[0]}</p>
+                <p className="text-xs text-white/60 leading-5">Demand Forecast, Inventory, Reservation. Structured computation -fast model, low cost.</p>
+              </div>
+              <div className="rounded-2xl border border-purple-500/30 bg-purple-500/5 p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <Image src={`${LOGO}/gemini.png`} alt="Gemini" width={28} height={28} />
+                  <div>
+                    <Tag color="purple">balanced tier</Tag>
+                    <p className="text-xs text-white/50 font-mono mt-0.5">gemini-3.5-flash</p>
+                  </div>
+                </div>
+                <p className="text-xs text-white/60 leading-5">Complaint Intelligence, Menu Intelligence. RAG synthesis -balanced reasoning, good context handling.</p>
+              </div>
+              <div className="rounded-2xl border border-orange-500/30 bg-orange-500/5 p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <Image src={`${LOGO}/claude.png`} alt="Claude" width={28} height={28} />
+                  <div>
+                    <Tag color="orange">strong tier</Tag>
+                    <p className="text-xs text-white/50 font-mono mt-0.5">claude-sonnet-4-6</p>
+                  </div>
+                </div>
+                <p className="text-xs text-white/60 leading-5">Critic Gate only. The highest-stakes node -always gets the strongest model available.</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div onClick={() => open(`${SC}/07_config/cometapi.png`, "CometAPI proxy")} className="cursor-zoom-in">
+                <Shot src={`${SC}/07_config/cometapi.png`} caption="CometAPI: unified proxy for 500+ models with one key" />
+              </div>
+              <div onClick={() => open(`${SC}/07_config/cometapi-dashboard.png`, "CometAPI dashboard")} className="cursor-zoom-in">
+                <Shot src={`${SC}/07_config/cometapi-dashboard.png`} caption="CometAPI dashboard: usage and per-model cost breakdown" />
+              </div>
+              <div onClick={() => open(`${SC}/07_config/cometapi-run.png`, "CometAPI per-node routing in a live run")} className="cursor-zoom-in">
+                <Shot src={`${SC}/07_config/cometapi-run.png`} caption="CometAPI in a live run: per-node model attribution in LangSmith" />
+              </div>
+            </div>
+          </div>
+
+          {/* Settings and profiles */}
+          <div className="mb-12">
+            <h3 className="text-white font-bold text-xl mb-4">Workspace configuration</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div onClick={() => open(`${SC}/07_config/settings.png`, "Workspace settings")} className="cursor-zoom-in">
+                <Shot src={`${SC}/07_config/settings.png`} caption="Settings: seating capacity, peak hours, timezone, approval threshold, stock warning levels" />
+              </div>
+              <div onClick={() => open(`${SC}/07_config/restaurant_profiles.png`, "Restaurant profiles")} className="cursor-zoom-in">
+                <Shot src={`${SC}/07_config/restaurant_profiles.png`} caption="Restaurant Profiles: named profiles override org defaults per run" />
+              </div>
+            </div>
+          </div>
+
+          {/* Tech stack table */}
+          <div className="mb-10">
+            <h3 className="text-white font-bold text-xl mb-6">Full stack</h3>
+            <div className="space-y-2">
+              {[
+                { layer: "Orchestration",    tech: "LangGraph StateGraph, 9 nodes, parallel fan-out, typed OrchestratorState" },
+                { layer: "Backend",          tech: "FastAPI 0.115, Uvicorn, Pydantic v2, SQLAlchemy, Alembic" },
+                { layer: "LLM",              tech: "Groq llama-3.3-70b (default), Gemini fallback, CometAPI per-node tiering" },
+                { layer: "Vector",           tech: "Qdrant -complaints and SOPs, org-scoped payload filters per tenant" },
+                { layer: "Database",         tech: "PostgreSQL 16, org_id scoping on all queries" },
+                { layer: "Cache",            tech: "Redis 7 -1hr TTL by scenario + date, approved plans only" },
+                { layer: "Forecasting",      tech: "Prophet + Pandas, peak detection, confidence bands" },
+                { layer: "Frontend",         tech: "Next.js 16, React 19, TypeScript, Tailwind CSS 4, Recharts" },
+                { layer: "Streaming",        tech: "FastAPI SSE -node_complete events + final complete; AsyncGroq for chat" },
+                { layer: "Auth",             tech: "JWT HS256 + passlib/bcrypt, multi-tenant, org-scoped" },
+                { layer: "Observability",    tech: "LangSmith, OpenTelemetry, Prometheus /metrics, Sentry, structlog JSON" },
+                { layer: "Evals",            tech: "LangSmith golden-v1 (50 runs, 90% CI gate), RAGAS, DeepEval" },
+                { layer: "Exports",          tech: "ReportLab PDF, openpyxl Excel role-aware workbook" },
+                { layer: "MCP",              tech: "Anthropic MCP SDK -run_planning_scenario + get_run_history" },
+              ].map(({ layer, tech }) => (
+                <div key={layer} className="flex gap-4 rounded-xl border border-white/5 bg-[#111] px-5 py-3 hover:border-white/10 transition">
+                  <span className="flex-shrink-0 w-32 text-xs font-mono text-orange-400/80 uppercase tracking-wider">{layer}</span>
+                  <span className="text-sm text-white/65">{tech}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Logos */}
+          <div className="rounded-2xl border border-black/8 bg-white p-8">
+            <p className="text-xs font-mono uppercase tracking-widest text-black/30 text-center mb-8">Integrated ecosystem</p>
+            <div className="flex flex-wrap items-center justify-center gap-8">
+              {logos.map(({ src, alt }) => (
+                <div key={alt} className="flex flex-col items-center gap-2 hover:scale-110 transition-transform duration-200">
+                  <Image src={src} alt={alt} width={36} height={36} className="object-contain" />
+                  <span className="text-[10px] font-mono text-black/70 uppercase tracking-wider font-semibold">{alt}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════
+            BY THE NUMBERS
+        ══════════════════════════════════════════════════════ */}
+        <section className="py-16 border-t border-white/5">
+          <p className="text-xs font-mono text-white/25 uppercase tracking-widest text-center mb-8">By the numbers</p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[
+              { v: "9",     l: "LangGraph nodes"     },
+              { v: "59",    l: "Runs last 7 days"     },
+              { v: "81%",   l: "Critic pass rate"     },
+              { v: "0.92",  l: "Peak critic score"    },
+              { v: "17s",   l: "Avg pipeline latency" },
+              { v: "5",     l: "Quality dimensions"   },
+              { v: "50",    l: "Golden eval runs"     },
+              { v: "$0.004",l: "Cost per run"         },
+            ].map(({ v, l }) => (
+              <div key={l} className="rounded-2xl border border-white/10 bg-[#111] p-5 text-center">
+                <div className="text-2xl md:text-3xl font-black text-white font-mono">{v}</div>
+                <div className="text-xs text-white/40 mt-1.5 uppercase tracking-wider">{l}</div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* ════════════════════════════════════════
-            TECH STACK
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10">
-          <Label>Stack</Label>
-          <SectionTitle>Built with production-grade tooling.</SectionTitle>
+        {/* ═══════════════════════════════════════════════════════
+            BUILD JOURNEY
+        ══════════════════════════════════════════════════════ */}
+        <section id="journey" className="py-24 border-t border-white/5">
+          <SectionLabel color="yellow">Build journey</SectionLabel>
+          <SectionHeading>Built solo. <span className="text-yellow-400">Mar to Jun 2026.</span></SectionHeading>
+          <p className="text-white/60 text-lg max-w-2xl mb-12 leading-relaxed">
+            Not a tutorial project. Not a demo. Six phases, each solving a real problem, each building on the previous one. Spec first, then infrastructure, then intelligence, then production systems.
+          </p>
 
-          <div className="space-y-6 mt-10">
+          {/* Recharts phase chart */}
+          <div className="rounded-2xl border border-white/10 bg-[#111] p-6 mb-10">
+            <p className="text-xs font-mono uppercase tracking-widest text-white/30 mb-6">Features shipped per phase</p>
+            <PhaseChart />
+          </div>
+
+          {/* Phase detail */}
+          <div className="space-y-3">
             {[
               {
-                layer: "Backend",
-                items: ["FastAPI 0.115", "Uvicorn", "Pydantic v2", "SQLAlchemy", "Alembic", "structlog"],
+                phase: "P0", title: "Architecture first",       date: "Mar 2026",      color: "orange",
+                why: "Most AI projects start with a model call. This one started with a PRD, a system architecture doc, a data model, API contracts, and an evaluation rubric. Spec-first before a single line of code.",
+                shipped: ["PRD", "System architecture", "PostgreSQL schema", "API contracts", "Evaluation rubric"],
               },
               {
-                layer: "Orchestration / AI",
-                items: ["LangGraph", "StateGraph", "Groq llama-3.3-70b", "Gemini (fallback)", "AsyncGroq", "Prophet", "Pandas"],
+                phase: "P1", title: "End-to-end skeleton",      date: "Mar - Apr 2026", color: "blue",
+                why: "The hardest thing in a multi-agent system is getting state to flow correctly through every node without silent failures. Needed a working 9-node graph with real services behind each node, not stubs.",
+                shipped: ["LangGraph graph", "FastAPI backend", "SQLAlchemy + Alembic", "5 domain services", "CriticService", "Qdrant seeding", "Next.js dashboard", "Docker Compose stack", "Unit tests", "Integration tests"],
               },
               {
-                layer: "Data",
-                items: ["PostgreSQL 16", "Qdrant", "Redis 7", "Alembic migrations"],
+                phase: "P2", title: "Real intelligence",        date: "Apr 2026",      color: "cyan",
+                why: "Placeholder logic isn't useful. Phase 2 replaced every stub with real algorithms: Prophet for forecasting, inventory shortage detection with feasibility awareness, menu strategy aligned to stock.",
+                shipped: ["Prophet forecasting", "Inventory shortage alerts", "Menu push/ease-back/avoid", "RAG pipeline refinement", "Eval rubric refinement"],
               },
               {
-                layer: "Frontend",
-                items: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS 4", "Recharts", "ReactMarkdown"],
+                phase: "P3", title: "Multi-scenario + audit",   date: "Apr 2026",      color: "purple",
+                why: "One hardcoded scenario is a demo. Four scenario presets with different demand profiles and risk weights is a product. And if you can't show why you made a decision, you can't trust the system.",
+                shipped: ["4 scenario presets", "Persisted planning runs", "Cost-aware CriticService", "5-dimension scoring", "Revision feedback"],
               },
               {
-                layer: "Auth & Streaming",
-                items: ["JWT HS256", "passlib + bcrypt", "FastAPI SSE", "Server-Sent Events"],
+                phase: "P4", title: "Production systems",       date: "May 2026",      color: "green",
+                why: "A system with no auth, no tracing, and no observability is a script. Phase 4 shipped across 12 workstream branches: auth, observability, evals, MCP, provider abstraction, all merged sequentially.",
+                shipped: ["JWT auth", "LangSmith tracing", "structlog JSON", "LLM cost tracking", "BaseLLMProvider", "RAGAS evals (faithfulness >= 0.8)", "DeepEval (hallucination <= 0.5)", "pytest integration tests", "MCP server", "Restaurant profiles"],
               },
               {
-                layer: "Observability",
-                items: ["LangSmith", "OpenTelemetry", "Prometheus", "Sentry", "structlog JSON"],
+                phase: "P5", title: "Operator experience",      date: "Jun 2026",      color: "yellow",
+                why: "The backend was solid. The operator experience was not. Phase 5 closed that gap: exports you can hand to a chef, a live pipeline you can watch, a chatbot that knows your data.",
+                shipped: ["PDF chef brief", "Excel role-aware export", "SSE streaming", "Redis caching", "What-if simulator", "OpenTelemetry", "Prometheus", "Sentry", "RAG chatbot", "LangSmith CI gate (pytest, 90% pass rate)", "Golden dataset 50 runs"],
               },
               {
-                layer: "Evals",
-                items: ["LangSmith golden-v1", "RAGAS", "DeepEval", "pytest CI gate"],
+                phase: "P6", title: "Per-node model routing",   date: "Jun 2026",      color: "pink",
+                why: "One model for every node is wasteful and wrong. The Critic needs the strongest reasoning available. Demand Forecast just needs something fast. The async rewrite also cut pipeline latency from 48.7s to 17s.",
+                shipped: ["CometAPI integration", "3-tier model routing", "Per-model cost attribution", "LangSmith per-node model visibility", "Async rewrite: 48.7s to 17s"],
               },
-              {
-                layer: "Exports & Tooling",
-                items: ["ReportLab (PDF)", "openpyxl (Excel)", "Anthropic MCP SDK", "Docker Compose"],
-              },
-            ].map(({ layer, items }) => (
-              <div key={layer} className="flex flex-col md:flex-row gap-3 md:items-center">
-                <div className="w-40 flex-shrink-0">
-                  <span className="text-xs font-mono uppercase tracking-wider text-orange-400">{layer}</span>
+            ].map(({ phase, title, date, color, why, shipped }) => (
+              <div key={phase} className={`rounded-2xl border-l-4 bg-[#111] border border-white/8 p-6 hover:border-white/15 transition ${colorMap[color as "orange"].split(" ")[0]}`}>
+                <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
+                  <div className="flex items-center gap-3">
+                    <Tag color={color as "orange"}>{phase}</Tag>
+                    <Tag color="green">Shipped</Tag>
+                    <h4 className="text-white font-bold">{title}</h4>
+                  </div>
+                  <span className="text-xs font-mono text-white/35">{date}</span>
                 </div>
+                <p className="text-sm text-white/55 italic mb-4 leading-6">{why}</p>
                 <div className="flex flex-wrap gap-2">
-                  {items.map((item) => (
-                    <Chip key={item}>{item}</Chip>
+                  {shipped.map((s) => (
+                    <span key={s} className="text-xs bg-white/5 border border-white/10 rounded px-2.5 py-1 text-white/60">{s}</span>
                   ))}
                 </div>
               </div>
@@ -916,42 +1060,77 @@ export default function Page() {
           </div>
         </section>
 
-        {/* ════════════════════════════════════════
-            FINAL CTA
-            ════════════════════════════════════════ */}
-        <section className="py-20 border-t border-white/10 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white">Want to see it running?</h2>
-          <p className="text-white-200 mt-4 max-w-xl mx-auto">
-            The full system runs locally with Docker Compose. Architecture docs, data model, API contracts, and the evaluation rubric are all in the repo.
-          </p>
+        {/* ═══════════════════════════════════════════════════════
+            WHY / CTA
+        ══════════════════════════════════════════════════════ */}
+        <section className="py-24 border-t border-white/5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            <div>
+              <SectionLabel color="orange">Why I built this</SectionLabel>
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-6 leading-tight">
+                Food sparked it.<br />
+                <span className="text-orange-400">AI powers it ! </span> 
+              </h2>
+              <p className="text-white/65 leading-8 mb-4">
+                I love building systems where intelligence is actually useful, not decorative. Restaurants fascinate me: high-stakes, data-rich, constantly reactive, and deeply underserved by software. Every shift is a planning problem. Every complaint is a signal. Every inventory item is a constraint.
+              </p>
+              <p className="text-white/65 leading-8">
+                CortexKitchen is what happens when you build the synthesis layer that doesn't exist. Production architecture. Real algorithms. A quality gate that actually blocks bad plans. This isn't a portfolio project. It's a product that works -and it can expand into real POS integrations, live reservation sync, scheduled digests, and role-based access as it grows.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <Card>
+                <Tag color="orange">Operators</Tag>
+                <h4 className="text-white font-semibold mt-3 mb-2">A shift brief that actually uses your data</h4>
+                <p className="text-sm text-white/60 leading-6">Before service starts, five agents have already read your demand forecast, reservation load, guest complaints, stock levels, and menu velocity. A verified brief arrives in under 90 seconds. No tabs. No spreadsheet. No surprises at 7 PM.</p>
+              </Card>
+              <Card>
+                <Tag color="blue">Engineers / CTOs</Tag>
+                <h4 className="text-white font-semibold mt-3 mb-2">Production multi-agent architecture you can actually learn from</h4>
+                <p className="text-sm text-white/60 leading-6">Typed LangGraph state, hybrid compute nodes, critic quality gate, per-node model routing, RAGAS + DeepEval evals, LangSmith CI gate, OTel tracing, Prometheus metrics, Redis caching, multi-tenant isolation. Every pattern documented in code.</p>
+              </Card>
+              <Card>
+                <Tag color="purple">MCP</Tag>
+                <h4 className="text-white font-semibold mt-3 mb-2">Claude Code talks to it natively</h4>
+                <p className="text-sm text-white/60 leading-6">Drop <code className="text-orange-300 font-mono text-xs">.mcp.json</code> in your project and Claude Code auto-discovers two tools: <code className="text-orange-300 font-mono text-xs">run_planning_scenario</code> and <code className="text-orange-300 font-mono text-xs">get_run_history</code>. Ask in natural language. The full 9-node pipeline executes with real auth and real data.</p>
+              </Card>
+            </div>
+          </div>
 
-          <div className="flex justify-center gap-4 mt-8 flex-wrap">
-            <a
-              href="https://github.com/anoushka45/cortexkitchen"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-6 py-3 rounded-full bg-orange-400 text-black font-semibold text-sm hover:bg-orange-300 transition"
-            >
-              View on GitHub
-            </a>
-            <a
-              href="mailto:vyasanoushka@gmail.com"
-              className="px-6 py-3 rounded-full border border-white/20 text-white text-sm hover:border-orange-400/50 transition"
-            >
-              Get in Touch
-            </a>
-            {/* <a
-              href="/docs/CortexKitchen_Overview.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-6 py-3 rounded-full border border-white/20 text-white text-sm hover:border-orange-400/50 transition"
-            >
-              Overview PDF
-            </a> */}
+          <div className="rounded-3xl border border-white/10 bg-[#111] p-10 md:p-16 text-center relative overflow-hidden">
+            <div className="absolute inset-0 -z-10">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-orange-500/8 blur-3xl" />
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-4">Want to see it running?</h2>
+            <p className="text-white/60 text-lg max-w-xl mx-auto mb-10 leading-relaxed">
+              Clone the repo. Run Docker Compose. Get a Groq key for free. The whole system is running in under 10 minutes.
+            </p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <a
+                href="https://github.com/anoushka45/cortexkitchen"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-7 py-3.5 rounded-xl bg-orange-500 text-white font-semibold hover:bg-orange-400 transition text-sm"
+              >
+                GitHub Repository
+              </a>
+              <a
+                href="/"
+                className="px-7 py-3.5 rounded-xl border border-white/20 text-white font-semibold hover:bg-white/5 transition text-sm"
+              >
+                Back to Portfolio
+              </a>
+            </div>
           </div>
         </section>
 
       </div>
+
+      {/* Lightbox */}
+      {lightbox && (
+        // @ts-ignore
+        <Lightbox src={lightbox.src} caption={lightbox.caption} onClose={() => setLightbox(null)} />
+      )}
     </main>
   );
 }
