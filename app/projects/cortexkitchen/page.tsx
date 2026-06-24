@@ -243,7 +243,7 @@ export default function Page() {
                 <Tag color="purple">LangGraph</Tag>
               </div>
 
-              <h1 className="text-6xl md:text-8xl font-black tracking-tight leading-none mb-6">
+              <h1 className="text-5xl md:text-8xl font-black tracking-tight leading-none mb-6">
                 <span className="text-white">Cortex</span>
                 <span className="relative">
                   <span className="absolute -inset-2 rounded-xl bg-orange-500/15 blur-xl" />
@@ -253,7 +253,7 @@ export default function Page() {
 
               {/* personal hook */}
               <p className="text-xl text-white/80 max-w-xl leading-relaxed mb-3 font-medium">
-                I love three things: AI, building real products, and pizza. 🍕
+                Five agents. Nine nodes. One verified brief before the first cover arrives.
               </p>
               <p className="text-base text-white/55 max-w-xl leading-relaxed mb-10">
                 CortexKitchen is what happens when all three collide. A production multi-agent AI platform where five specialist agents run in parallel through a 9-node LangGraph pipeline, verified by a critic across five quality dimensions, streamed live to the operator. One verified pre-shift brief in under 90 seconds.
